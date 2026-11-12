@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PC Builder 101 — 3D Interactive Multimedia Hardware Learning</title>
+
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. FULLSCREEN THREE.JS 3D WEBGL VIEWPORT & HOTSPOT LAYER
+       ======================================================================== -->
+  <div id="canvas-container"></div>
+  <div class="viewport-vignette"></div>
+  <div id="hotspot-layer"></div>
+
+  <!-- Toast Notification -->
+  <div id="toast-notification">Sistem Multimedia 3D Siap</div>
+
+  <!-- ========================================================================
+       2. TOP GLASS NAVIGATION BAR
+       ======================================================================== -->
+  <header class="top-navbar">
+    <div class="brand-box" onclick="document.querySelector('[data-view=home]').click()">
+      <div class="brand-logo">
+        <svg viewBox="0 0 28 28" width="22" height="22" fill="none">
+          <rect x="3" y="3" width="22" height="22" rx="5" stroke="#00f0ff" stroke-width="2.2" />
+          <rect x="9" y="9" width="10" height="10" rx="2" fill="#00f0ff" />
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">PC BUILDER 101 • 3D STUDIO</div>
+        <div class="brand-subtitle">UTS Sistem Multimedia • S1 Ilmu Komputer</div>
+      </div>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-view="home">
+        <span>🏠 Beranda 3D</span>
+      </button>
+      <button class="nav-tab" data-view="explore">
+        <span>🔍 Eksplorasi Hardware</span>
+        <span class="tab-badge">8 Part</span>
+      </button>
+      <button class="nav-tab" data-view="simulate">
+        <span>🛠️ Simulasi Rakit & PSU</span>
+      </button>
+      <button class="nav-tab" data-view="lab">
+        <span>🎬 Video & Audio BIOS</span>
+      </button>
+      <button class="nav-tab" data-view="quiz">
+        <span>🏆 Kuis Evaluasi</span>
+        <span class="tab-badge">10 Soal</span>
+      </button>
+    </nav>
+
+    <div class="nav-actions">
+      <input type="file" id="input-custom-glb" accept=".glb,.gltf" style="display:none;" />
+      <button class="icon-btn" id="btn-upload-glb" title="Muat Model 3D Blender (.glb/.gltf)">
+        📦 Muat .GLB
+      </button>
+      <button class="icon-btn" id="btn-restore-rig" style="display:none;">
+        🔄 Rig Default
+      </button>
+      <button class="icon-btn" id="btn-toggle-bgm">
+        🎵 BGM: OFF
+      </button>
+      <button class="icon-btn active" id="btn-toggle-sfx">
+        🔊 SFX: ON
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       3. MODULE VIEWS
+       ======================================================================== -->
+
+  <!-- VIEW 1: BERANDA (HERO OVERLAY + INTERACTIVE 3D RIG) -->
+  <section class="view-section active" id="view-home">
+    <div class="glass-panel home-hero-panel">
+      <div class="hero-badge">
+        <span>✨ WEBGL THREE.JS • INTERACTIVE MULTIMEDIA</span>
+      </div>
+      <h1 class="hero-heading">
+        Eksplorasi & Rakit <span>Perangkat Keras PC</span> dalam Ruang 3D.
+      </h1>
+      <p class="hero-desc">
+        Media pembelajaran interaktif yang memadukan objek <strong>3D Real-Time (Three.js)</strong>, narasi suara <strong>Voice-Over</strong>, simulator <strong>Audio Kode Beep BIOS</strong>, <strong>Video Praktik</strong>, serta <strong>Simulasi Rakit PC & Kalkulator Daya PSU</strong>.
+      </p>
+
+      <div class="multimedia-pills">
+        <span class="mm-pill">📝 Teks Materi</span>
+        <span class="mm-pill">🧊 Grafis 3D & SVG</span>
+        <span class="mm-pill">🔊 Voice-Over & BIOS Audio</span>
+        <span class="mm-pill">🎬 Video Tutorial</span>
+        <span class="mm-pill">⚙️ Animasi & Simulasi</span>
+      </div>
+
+      <div class="hero-cta-group">
+        <button class="btn-primary" id="btn-start-explore">
+          🔍 Mulai Eksplorasi 3D
+        </button>
+        <button class="btn-secondary" id="btn-start-sim">
+          🛠️ Simulasi Rakit PC
+        </button>
+      </div>
+
+      <button class="btn-secondary" id="btn-welcome-vo" style="width:100%; margin-bottom:16px;">
+        🔊 Putar Sambutan Audio (Voice-Over)
+      </button>
+
+      <div class="quick-stats-grid">
+        <div class="stat-box">
+          <div class="stat-num">8 Part</div>
+          <div class="stat-label">Komponen 3D</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">5 Kode</div>
+          <div class="stat-label">Audio BIOS</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">360°</div>
+          <div class="stat-label">Orbit & Bedah 3D</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 2: EKSPLORASI HARDWARE 3D -->
+  <section class="view-section" id="view-explore">
+    <div class="explore-layout">
+      <!-- Left: 8 Components List -->
+      <div class="glass-panel parts-list-panel">
+        <div class="panel-header">
+          <div class="panel-title">🧩 Daftar Komponen 3D</div>
+        </div>
+        <div class="panel-body" id="parts-list-container"></div>
+      </div>
+
+      <!-- Right: Component Inspector (Text, SVG, Voice-Over, Specs) -->
+      <div class="glass-panel part-detail-panel">
+        <div class="panel-header">
+          <div class="panel-title">📋 Detail & Narasi Komponen</div>
+        </div>
+        <div class="panel-body" id="part-inspector-content"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 3: SIMULASI RAKIT PC 3D & KALKULATOR DAYA PSU -->
+  <section class="view-section" id="view-simulate">
+    <div class="sim-layout">
+      <!-- Left: 7-Step Interactive 3D Assembly -->
+      <div class="glass-panel sim-steps-panel">
+        <div class="panel-header">
+          <div class="panel-title">🛠️ Urutan Rakit PC 3D</div>
+          <div style="display:flex; gap:6px;">
+            <button class="icon-btn" id="btn-sim-reset" title="Kosongkan Casing & Mulai dari Awal">🔄 Reset</button>
+            <button class="icon-btn active" id="btn-sim-auto" title="Pasang Otomatis Semua Komponen">⚡ Auto</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="sim-progress-wrap">
+            <div class="sim-progress-header">
+              <span>Progres Perakitan 3D</span>
+              <span id="sim-progress-label">0 / 7 Komponen</span>
+            </div>
+            <div class="sim-progress-bar">
+              <div class="sim-progress-fill" id="sim-progress-fill"></div>
+            </div>
+          </div>
+          <div id="assembly-steps-list"></div>
+        </div>
+      </div>
+
+      <!-- Right: Real-Time PSU Wattage Calculator -->
+      <div class="glass-panel psu-calc-panel">
+        <div class="panel-header">
+          <div class="panel-title">⚡ Kalkulator Daya PSU</div>
+        </div>
+        <div class="panel-body">
+          <p style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">
+            Pilih preset atau kombinasikan spesifikasi untuk menghitung total konsumsi daya dan rekomendasi Power Supply:
+          </p>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:14px;">
+            <button class="icon-btn preset-calc-btn" data-preset="office" style="justify-content:center;">💼 Office</button>
+            <button class="icon-btn active preset-calc-btn" data-preset="multimedia" style="justify-content:center;">🎬 Multimedia</button>
+            <button class="icon-btn preset-calc-btn" data-preset="gaming3d" style="justify-content:center;">🚀 3D/Gaming</button>
+          </div>
+
+          <div class="calc-form-group">
+            <label class="calc-label">Processor (CPU)</label>
+            <select class="calc-select" id="calc-cpu"></select>
+          </div>
+          <div class="calc-form-group">
+            <label class="calc-label">Kartu Grafis (GPU / VGA)</label>
+            <select class="calc-select" id="calc-gpu"></select>
+          </div>
+          <div class="calc-form-group">
+            <label class="calc-label">Konfigurasi Memori RAM</label>
+            <select class="calc-select" id="calc-ram"></select>
+          </div>
+          <div class="calc-form-group">
+            <label class="calc-label">Storage (SSD NVMe / HDD)</label>
+            <select class="calc-select" id="calc-storage"></select>
+          </div>
+          <div class="calc-form-group">
+            <label class="calc-label">Sistem Pendingin & Kipas Casing</label>
+            <select class="calc-select" id="calc-cooling"></select>
+          </div>
+
+          <div class="watt-meter-card">
+            <div style="font-size:11px; color:var(--text-secondary); font-family:var(--font-mono);">
+              ESTIMASI BEBAN PUNCAK (+45W Motherboard)
+            </div>
+            <div class="watt-value" id="calc-total-watt">446 Watt</div>
+            <div class="psu-recommend-badge" id="calc-psu-rec">
+              Rekomendasi PSU: 650W 80+ Gold
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 4: LAB AUDIO DIAGNOSA BIOS & VIDEO TUTORIAL -->
+  <section class="view-section" id="view-lab">
+    <div class="lab-layout">
+      <!-- Left: BIOS Beep Code Synthesizer & Oscilloscope -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title">🔊 Simulator Audio Kode Beep BIOS</div>
+        </div>
+        <div class="panel-body">
+          <div class="oscilloscope-box">
+            <div style="display:flex; justify-content:space-between; font-size:10.5px; font-family:var(--font-mono); color:var(--accent-cyan); margin-bottom:4px;">
+              <span>LIVE AUDIO OSCILLOSCOPE WAVEFORM</span>
+              <span>FREKUENSI SPEAKER MOTHERBOARD</span>
+            </div>
+            <canvas id="beep-waveform" width="460" height="76"></canvas>
+          </div>
+          <div id="bios-beep-list"></div>
+        </div>
+      </div>
+
+      <!-- Right: Video Tutorial Player + Interactive Motion Graphic Chapters -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title">🎬 Modul Video Tutorial Perakitan PC</div>
+          <div>
+            <input type="file" id="input-custom-video" accept="video/mp4,video/webm" style="display:none;" />
+            <button class="icon-btn" id="btn-load-mp4">📂 Muat File .MP4 Kelompok</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="video-stage-wrap">
+            <canvas id="tutorial-video-canvas" width="640" height="360"></canvas>
+            <video id="custom-video-player" controls style="display:none;"></video>
+          </div>
+
+          <div class="video-controls-bar">
+            <div style="display:flex; gap:8px;">
+              <button class="icon-btn active" id="btn-video-play">⏸️ Pause Animasi Video</button>
+              <button class="icon-btn" id="btn-video-narrate">🔊 Narasi Bab Ini</button>
+            </div>
+            <span style="font-size:11px; color:var(--text-secondary); font-family:var(--font-mono);">
+              4 Bab Materi Perakitan
+            </span>
+          </div>
+
+          <div id="video-chapter-summary" style="font-size:12.5px; color:#cbd5e1; line-height:1.55; margin-bottom:12px; padding:10px 12px; background:rgba(15,23,42,0.6); border-radius:10px; border:1px solid var(--border-subtle);"></div>
+
+          <div class="chapter-grid" id="video-chapters-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 5: EVALUASI KUIS MULTIMEDIA INTERAKTIF -->
+  <section class="view-section" id="view-quiz">
+    <div class="glass-panel quiz-container-panel">
+      <div class="panel-header">
+        <div class="panel-title">🏆 Evaluasi Kuis Multimedia Interaktif (Teks, Visual & Audio BIOS)</div>
+      </div>
+      <div class="panel-body" id="quiz-stage-content"></div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. BOTTOM 3D VIEWPORT CONTROL BAR
+       ======================================================================== -->
+  <div class="camera-hint">
+    🖱️ Klik & Geser: Putar 360° • Scroll: Zoom • Klik Komponen 3D / Pin: Inspeksi Detail
+  </div>
+
+  <div class="viewport-hud-bottom">
+    <button class="hud-btn" id="hud-btn-explode">
+      💥 Mode Bedah 3D (Exploded View)
+    </button>
+    <button class="hud-btn" id="hud-btn-glass">
+      🪟 Buka Kaca Casing
+    </button>
+    <div class="hud-divider"></div>
+    <button class="hud-btn" id="hud-btn-rgb">
+      <span class="rgb-swatch" style="background:#00f0ff;"></span>
+      <span>Tema RGB</span>
+    </button>
+    <button class="hud-btn active" id="hud-btn-power">
+      ⚡ Power: ON (Kipas Aktif)
+    </button>
+    <div class="hud-divider"></div>
+    <button class="hud-btn" id="hud-btn-reset-cam">
+      🎯 Reset Kamera
+    </button>
+  </div>
+
+  <!-- ========================================================================
+       5. THREE.JS LIBRARIES & APPLICATION SCRIPTS
+       ======================================================================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <script src="js/data.js"></script>
+  <script src="js/audio-engine.js"></script>
+  <script src="js/scene3d.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
