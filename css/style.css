@@ -1188,7 +1188,7 @@ html, body {
   top: 92px;
   left: 50%;
   transform: translateX(-50%) translateY(-20px);
-  z-index: 50;
+  z-index: 150;
   padding: 10px 18px;
   border-radius: 999px;
   background: rgba(10, 16, 31, 0.92);
@@ -1205,6 +1205,276 @@ html, body {
 #toast-notification.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   MODAL EDUKASI KOMPARASI FORM FACTOR MOTHERBOARD
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 960px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.94);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(0, 240, 255, 0.15);
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.modal-backdrop.show .modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(6, 9, 19, 0.5);
+}
+
+.modal-badge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.modal-subtitle {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s;
+}
+
+.modal-close-btn:hover {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+.modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 14px 24px;
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(6, 9, 19, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Form Factor Grid */
+.form-factor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.ff-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.ff-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 240, 255, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.ff-card.active-model {
+  border-color: var(--accent-cyan);
+  background: linear-gradient(180deg, rgba(0, 240, 255, 0.12), rgba(15, 23, 42, 0.85));
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.18);
+}
+
+.ff-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ff-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.ff-dim {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 12px;
+}
+
+/* Visual Dimension Preview Box */
+.ff-visual-box {
+  width: 100%;
+  height: 90px;
+  border-radius: 8px;
+  background: rgba(6, 9, 19, 0.6);
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.ff-box-inner {
+  border-radius: 4px;
+  background: rgba(0, 240, 255, 0.25);
+  border: 1.5px solid var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  transition: all 0.2s;
+}
+
+.ff-info-row {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.ff-info-row strong {
+  color: var(--text-primary);
+}
+
+.ff-desc-box {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+  line-height: 1.45;
+  color: #94a3b8;
+  flex: 1;
+}
+
+/* Inspector Action Bar */
+.inspector-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.btn-inspector-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  background: rgba(0, 240, 255, 0.09);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.btn-inspector-action:hover {
+  background: rgba(0, 240, 255, 0.22);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  transform: translateY(-1px);
+}
+
+/* Narration Sound Button in Assembly Steps */
+.btn-step-narrate {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: all 0.18s;
+}
+
+.btn-step-narrate:hover {
+  background: rgba(0, 240, 255, 0.18);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
 }
 
 /* Responsive Adjustments */
@@ -1228,6 +1498,15 @@ html, body {
     overflow-y: auto;
   }
   .quiz-options-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-factor-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-factor-grid {
     grid-template-columns: 1fr;
   }
 }

@@ -165,34 +165,173 @@ class PCBuilder3DScene {
   }
 
   createCircuitTexture() {
+    return this.createMsiMpgPcbTexture();
+  }
+
+  createMsiMpgPcbTexture() {
     const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 512;
+    canvas.width = 1024;
+    canvas.height = 1024;
     const ctx = canvas.getContext('2d');
 
-    ctx.fillStyle = '#090f1d';
-    ctx.fillRect(0, 0, 512, 512);
+    // 1. Base Dark Carbon Matte PCB
+    ctx.fillStyle = '#070a12';
+    ctx.fillRect(0, 0, 1024, 1024);
 
-    // Draw subtle copper/cyan circuit traces
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.22)';
-    ctx.lineWidth = 2;
-    for (let i = 0; i < 42; i++) {
-      const x1 = (i * 37) % 512;
-      const y1 = (i * 53) % 512;
+    // 2. Carbon Fiber Weave Texture (Subtle Diagonal Hatch)
+    const tileSize = 8;
+    for (let x = 0; x < 1024; x += tileSize) {
+      for (let y = 0; y < 1024; y += tileSize) {
+        const isAlternate = ((x / tileSize) + (y / tileSize)) % 2 === 0;
+        ctx.fillStyle = isAlternate ? 'rgba(255, 255, 255, 0.024)' : 'rgba(0, 0, 0, 0.28)';
+        ctx.fillRect(x, y, tileSize, tileSize);
+      }
+    }
+
+    // 3. Dense High-Speed Bus Traces (Gold & Cyan)
+    // CPU to DDR5 Memory Bus (Serpentine & Straight Traces)
+    ctx.lineWidth = 1.6;
+    for (let i = 0; i < 30; i++) {
+      const yStart = 230 + i * 8;
+      ctx.strokeStyle = i % 2 === 0 ? 'rgba(245, 158, 11, 0.38)' : 'rgba(0, 240, 255, 0.32)';
       ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x1 + 40, y1);
-      ctx.lineTo(x1 + 65, y1 + 25);
-      ctx.lineTo(x1 + 65, y1 + 80);
+      ctx.moveTo(410, yStart);
+      ctx.lineTo(530, yStart);
+      ctx.lineTo(560, yStart - 25);
+      ctx.lineTo(670, yStart - 25);
       ctx.stroke();
 
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
+      // Solder pad dots
+      ctx.fillStyle = '#f59e0b';
       ctx.beginPath();
-      ctx.arc(x1, y1, 3, 0, Math.PI * 2);
+      ctx.arc(670, yStart - 25, 2, 0, Math.PI * 2);
       ctx.fill();
     }
 
+    // CPU to PCIe 5.0 High-Speed Differential Pairs
+    for (let i = 0; i < 26; i++) {
+      const xStart = 270 + i * 11;
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.32)';
+      ctx.beginPath();
+      ctx.moveTo(xStart, 410);
+      ctx.lineTo(xStart, 490);
+      ctx.lineTo(xStart + 35, 535);
+      ctx.lineTo(xStart + 35, 620);
+      ctx.stroke();
+
+      ctx.fillStyle = 'rgba(226, 232, 240, 0.55)';
+      ctx.beginPath();
+      ctx.arc(xStart + 35, 620, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // PCH Chipset & M.2 Bus Traces (Bottom Half)
+    for (let i = 0; i < 36; i++) {
+      const yStart = 670 + (i * 9) % 290;
+      const xStart = 460 + (i * 15) % 380;
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.25)';
+      ctx.beginPath();
+      ctx.moveTo(xStart, yStart);
+      ctx.lineTo(xStart + 45, yStart);
+      ctx.lineTo(xStart + 70, yStart + 25);
+      ctx.lineTo(xStart + 115, yStart + 25);
+      ctx.stroke();
+    }
+
+    // 4. Audio Boost 5 Isolated PCB Strip (Bottom-Left)
+    ctx.save();
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 3.5;
+    ctx.shadowColor = '#f59e0b';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.moveTo(20, 650);
+    ctx.bezierCurveTo(160, 660, 185, 790, 185, 1000);
+    ctx.stroke();
+    ctx.restore();
+
+    // Isolated Audio Ground Plane
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.05)';
+    ctx.beginPath();
+    ctx.moveTo(0, 650);
+    ctx.bezierCurveTo(160, 660, 185, 790, 185, 1024);
+    ctx.lineTo(0, 1024);
+    ctx.closePath();
+    ctx.fill();
+
+    // Audio Boost 5 Silkscreen
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = 'bold 13px monospace';
+    ctx.fillText('AUDIO BOOST 5', 40, 715);
+    ctx.font = '10px monospace';
+    ctx.fillStyle = 'rgba(251, 191, 36, 0.75)';
+    ctx.fillText('ISOLATED PCB LAYER', 40, 735);
+
+    // 5. ATX 9 Standoff Mounting Holes with Brass Grounding Rings
+    const standoffHoles = [
+      { x: 55, y: 55 }, { x: 512, y: 55 }, { x: 965, y: 55 },
+      { x: 55, y: 512 }, { x: 512, y: 512 }, { x: 965, y: 512 },
+      { x: 55, y: 965 }, { x: 512, y: 965 }, { x: 965, y: 965 }
+    ];
+    standoffHoles.forEach(h => {
+      // Brass outer ring
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.arc(h.x, h.y, 22, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Center hole
+      ctx.fillStyle = '#020617';
+      ctx.beginPath();
+      ctx.arc(h.x, h.y, 14, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Surrounding grounding solder dots
+      ctx.fillStyle = '#cbd5e1';
+      for (let a = 0; a < 6; a++) {
+        const rad = (a / 6) * Math.PI * 2;
+        const dx = h.x + Math.cos(rad) * 30;
+        const dy = h.y + Math.sin(rad) * 30;
+        ctx.beginPath();
+        ctx.arc(dx, dy, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    // 6. Silkscreen Labels & MSI Typography
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('MSI MPG Z790 CARBON WIFI', 320, 105);
+
+    ctx.font = 'bold 12px monospace';
+    ctx.fillStyle = 'rgba(0, 240, 255, 0.9)';
+    ctx.fillText('LIGHTNING GEN 5 (PCIe 5.0 x16 • 128 GB/s)', 240, 645);
+    ctx.fillText('DDR5 MEMORY BOOST (7600+ MHz OC)', 670, 235);
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+    ctx.font = '10px monospace';
+    ctx.fillText('SOCKET LGA1700 (12th / 13th / 14th GEN INTEL CORE)', 220, 155);
+    ctx.fillText('M.2_1 (CPU) PCIe 5.0 x4 SHIELD FROZR', 240, 480);
+    ctx.fillText('M.2_2/3/4 (PCH Z790) LIGHTNING GEN 4', 240, 755);
+    ctx.fillText('EZ DEBUG: [CPU] [DRAM] [VGA] [BOOT]', 770, 400);
+    ctx.fillText('JFP1 (FRONT PANEL HEADER)', 770, 995);
+    ctx.fillText('JAUD1 (FRONT AUDIO)', 40, 995);
+    ctx.fillText('SATA 6Gb/s [1-6]', 890, 715);
+
+    // Decorative SMT Resistors & Capacitors clusters
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
+    ctx.lineWidth = 1;
+    for (let c = 0; c < 28; c++) {
+      const px = 200 + (c * 31) % 700;
+      const py = 180 + (c * 47) % 780;
+      ctx.fillRect(px, py, 14, 8);
+      ctx.strokeRect(px - 1, py - 1, 16, 10);
+    }
+
     const tex = new THREE.CanvasTexture(canvas);
+    tex.anisotropy = 8;
     return tex;
   }
 
@@ -356,59 +495,261 @@ class PCBuilder3DScene {
     });
 
     // =========================================================================
-    // 1. MOTHERBOARD ATX ('mobo')
+    // 1. MOTHERBOARD ATX — MSI MPG Z790 CARBON WIFI ('mobo')
     // =========================================================================
     const moboGroup = new THREE.Group();
     const pcbMat = new THREE.MeshStandardMaterial({
       map: pcbTex,
-      roughness: 0.35,
-      metalness: 0.45
+      roughness: 0.32,
+      metalness: 0.40
     });
+    const titaniumDark = new THREE.MeshStandardMaterial({ color: 0x18202f, metalness: 0.85, roughness: 0.24 });
+    const chromeSteel = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.96, roughness: 0.12 });
+    const carbonMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.45, metalness: 0.30 });
+    const copperHeatpipe = new THREE.MeshStandardMaterial({ color: 0xc2782b, metalness: 0.92, roughness: 0.18 });
+    const audioGoldCap = new THREE.MeshStandardMaterial({ color: 0xfbbf24, metalness: 0.92, roughness: 0.20 });
+    const usbBlue = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.35, metalness: 0.6 });
+    const usbRed = new THREE.MeshStandardMaterial({ color: 0xd92d20, roughness: 0.35, metalness: 0.6 });
+
+    // 1.1 PCB Main Board (ATX Form Factor: 30.5 x 24.4 cm)
     const pcbBoard = new THREE.Mesh(new THREE.BoxGeometry(2.55, 3.2, 0.09), pcbMat);
     moboGroup.add(pcbBoard);
 
-    // VRM Heatsinks (Left & Top of CPU)
-    const vrmLeft = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.25, 0.28), gunmetal);
-    vrmLeft.position.set(-0.95, 0.85, 0.14);
-    const vrmLeftRgb = new THREE.Mesh(new THREE.BoxGeometry(0.12, 1.1, 0.3), this.createRgbMaterial(0x00f0ff, 1.3));
-    vrmLeftRgb.position.set(-0.95, 0.85, 0.15);
-    const vrmTop = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.32, 0.26), gunmetal);
-    vrmTop.position.set(-0.2, 1.38, 0.14);
-    moboGroup.add(vrmLeft, vrmLeftRgb, vrmTop);
+    // 1.2 MSI Extended Rear I/O Shroud & Shield Armor
+    const ioArmor = new THREE.Mesh(new THREE.BoxGeometry(0.46, 1.48, 0.36), titaniumDark);
+    ioArmor.position.set(-1.04, 0.84, 0.22);
+    const ioBevel = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.20, 0.35), gunmetal);
+    ioBevel.rotation.z = -0.32;
+    ioBevel.position.set(-1.08, 1.50, 0.22);
+    const ioCarbonInlay = new THREE.Mesh(new THREE.BoxGeometry(0.36, 1.25, 0.015), carbonMat);
+    ioCarbonInlay.position.set(-1.04, 0.84, 0.405);
 
-    // CPU Socket Frame on Motherboard
-    const socketBase = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.76, 0.06), silverMetal);
-    socketBase.position.set(-0.22, 0.78, 0.07);
-    moboGroup.add(socketBase);
+    // Illuminated ARGB MSI Dragon Crest / "MPG" Emblem (Reactive to Active RGB Theme)
+    const ioRgbEmblem = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.32, 0.02), this.createRgbMaterial(0x00f0ff, 1.6));
+    ioRgbEmblem.position.set(-1.04, 0.95, 0.415);
+    const ioRgbSlash = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.65, 0.02), this.createRgbMaterial(0x00f0ff, 1.4));
+    ioRgbSlash.rotation.z = 0.35;
+    ioRgbSlash.position.set(-0.92, 0.52, 0.41);
+    moboGroup.add(ioArmor, ioBevel, ioCarbonInlay, ioRgbEmblem, ioRgbSlash);
 
-    // 4x DDR5 DIMM Slots on Motherboard
-    for (let i = 0; i < 4; i++) {
-      const slot = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1.32, 0.08), darkMetal);
-      slot.position.set(0.45 + i * 0.13, 0.78, 0.08);
-      moboGroup.add(slot);
+    // 1.3 Rear I/O Shield Ports Array (Facing Back -X)
+    // Wi-Fi 6E/7 Dual Gold Antenna SMA Connectors
+    [-1.28].forEach(xP => {
+      [1.40, 1.26].forEach(yP => {
+        const sma = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.12, 16), goldMat);
+        sma.rotation.z = Math.PI / 2;
+        sma.position.set(xP, yP, 0.24);
+        const smaPin = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.16, 8), goldMat);
+        smaPin.rotation.z = Math.PI / 2;
+        smaPin.position.set(xP, yP, 0.24);
+        moboGroup.add(sma, smaPin);
+      });
+    });
+
+    // Intel 2.5G LAN RJ45 Port (Metal Casing)
+    const lanPort = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.20, 0.18), silverMetal);
+    lanPort.position.set(-1.26, 0.56, 0.22);
+    moboGroup.add(lanPort);
+
+    // USB Ports (Red USB 3.2 Gen 2 & Blue USB 3.2 Gen 1)
+    const usbRedPort = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.15, 0.12), usbRed);
+    usbRedPort.position.set(-1.26, 0.78, 0.22);
+    const usbBluePort1 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.26, 0.12), usbBlue);
+    usbBluePort1.position.set(-1.26, 0.98, 0.22);
+    const usbBluePort2 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.15, 0.12), usbBlue);
+    usbBluePort2.position.set(-1.26, 1.15, 0.22);
+    // USB Type-C 20Gbps Port
+    const typeCPort = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.08, 16), chromeSteel);
+    typeCPort.rotation.z = Math.PI / 2;
+    typeCPort.position.set(-1.26, 0.42, 0.16);
+    moboGroup.add(usbRedPort, usbBluePort1, usbBluePort2, typeCPort);
+
+    // 5x Gold-plated 3.5mm Audio Jacks & Optical S/PDIF Port
+    for (let k = 0; k < 5; k++) {
+      const jack = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.08, 14), goldMat);
+      jack.rotation.z = Math.PI / 2;
+      jack.position.set(-1.26, 0.14 + k * 0.055, 0.22);
+      moboGroup.add(jack);
+    }
+    const spdif = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.08), darkMetal);
+    spdif.position.set(-1.26, 0.08, 0.22);
+    moboGroup.add(spdif);
+
+    // Clear CMOS & Flash BIOS Buttons
+    const biosBtn1 = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.06, 10), darkMetal);
+    biosBtn1.rotation.z = Math.PI / 2;
+    biosBtn1.position.set(-1.26, 1.49, 0.24);
+    moboGroup.add(biosBtn1);
+
+    // 1.4 VRM Extended Heatsinks & Interconnecting Heatpipe
+    const vrmLeft = new THREE.Mesh(new THREE.BoxGeometry(0.32, 1.18, 0.30), titaniumDark);
+    vrmLeft.position.set(-0.70, 0.85, 0.19);
+    // Cooling Fin Slices on Left Heatsink
+    for (let f = 0; f < 5; f++) {
+      const fin = new THREE.Mesh(new THREE.BoxGeometry(0.33, 0.022, 0.31), gunmetal);
+      fin.position.set(-0.70, 0.42 + f * 0.21, 0.19);
+      moboGroup.add(fin);
     }
 
-    // 2x PCIe x16 Slots (Steel Armor)
-    const pcie1 = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.1, 0.1), silverMetal);
-    pcie1.position.set(-0.3, -0.35, 0.08);
-    const pcie2 = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.09, 0.08), darkMetal);
-    pcie2.position.set(-0.3, -1.05, 0.08);
-    moboGroup.add(pcie1, pcie2);
+    const vrmTop = new THREE.Mesh(new THREE.BoxGeometry(1.08, 0.32, 0.28), titaniumDark);
+    vrmTop.position.set(-0.20, 1.38, 0.18);
+    const vrmTopCarbon = new THREE.Mesh(new THREE.BoxGeometry(0.96, 0.08, 0.015), carbonMat);
+    vrmTopCarbon.position.set(-0.20, 1.38, 0.325);
 
-    // Chipset Heatsink (Bottom Right) & CMOS Battery
-    const chipset = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.62, 0.16), gunmetal);
-    chipset.position.set(0.62, -0.92, 0.1);
-    const chipsetGlow = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.08, 0.18), this.createRgbMaterial(0x00f0ff, 1.4));
-    chipsetGlow.position.set(0.62, -0.92, 0.1);
-    const cmos = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.05, 24), silverMetal);
-    cmos.rotation.x = Math.PI / 2;
-    cmos.position.set(-0.85, -0.72, 0.07);
-    moboGroup.add(chipset, chipsetGlow, cmos);
+    // Interconnecting Nickel-Plated Copper Heatpipe
+    const pipeVert = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.60, 16), copperHeatpipe);
+    pipeVert.position.set(-0.62, 1.12, 0.33);
+    const pipeHoriz = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.76, 16), copperHeatpipe);
+    pipeHoriz.rotation.z = Math.PI / 2;
+    pipeHoriz.position.set(-0.24, 1.38, 0.33);
+    moboGroup.add(vrmLeft, vrmTop, vrmTopCarbon, pipeVert, pipeHoriz);
 
-    // 24-Pin ATX Connector Header
-    const atxHeader = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.58, 0.16), darkMetal);
-    atxHeader.position.set(1.12, 0.55, 0.1);
+    // 1.5 VRM Power Delivery Phases (19+1+1 Duet Rail Phases: Chokes & Solid Caps)
+    // Left chokes & caps
+    for (let c = 0; c < 8; c++) {
+      const chokeY = 0.44 + c * 0.10;
+      const choke = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.065, 0.065), darkMetal);
+      choke.position.set(-0.48, chokeY, 0.08);
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.07, 12), silverMetal);
+      cap.rotation.x = Math.PI / 2;
+      cap.position.set(-0.48, chokeY, 0.14);
+      moboGroup.add(choke, cap);
+    }
+    // Top chokes & caps
+    for (let c = 0; c < 8; c++) {
+      const chokeX = -0.52 + c * 0.10;
+      const choke = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.065, 0.065), darkMetal);
+      choke.position.set(chokeX, 1.18, 0.08);
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.07, 12), silverMetal);
+      cap.rotation.x = Math.PI / 2;
+      cap.position.set(chokeX, 1.18, 0.14);
+      moboGroup.add(choke, cap);
+    }
+
+    // 1.6 CPU Socket LGA1700 (Intel 12/13/14th Gen)
+    const socketBase = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.76, 0.04), silverMetal);
+    socketBase.position.set(-0.22, 0.78, 0.065);
+    const socketFrame = new THREE.Mesh(new THREE.BoxGeometry(0.70, 0.70, 0.045), chromeSteel);
+    socketFrame.position.set(-0.22, 0.78, 0.075);
+    const socketCover = new THREE.Mesh(new THREE.BoxGeometry(0.50, 0.50, 0.05), darkMetal);
+    socketCover.position.set(-0.22, 0.78, 0.08);
+    const socketTri = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.015, 3), goldMat);
+    socketTri.rotation.x = Math.PI / 2;
+    socketTri.position.set(-0.42, 0.58, 0.108);
+    // Metal Socket Load Lever
+    const leverArm = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.76, 12), chromeSteel);
+    leverArm.position.set(0.16, 0.78, 0.09);
+    const leverHandle = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.04, 0.04), chromeSteel);
+    leverHandle.position.set(0.18, 0.40, 0.09);
+    moboGroup.add(socketBase, socketFrame, socketCover, socketTri, leverArm, leverHandle);
+
+    // 1.7 4x DDR5 Memory Boost DIMM Slots
+    for (let i = 0; i < 4; i++) {
+      const slotX = 0.45 + i * 0.13;
+      const slot = new THREE.Mesh(new THREE.BoxGeometry(0.065, 1.34, 0.08), darkMetal);
+      slot.position.set(slotX, 0.78, 0.08);
+      const armorStrip = new THREE.Mesh(new THREE.BoxGeometry(0.068, 1.28, 0.03), silverMetal);
+      armorStrip.position.set(slotX, 0.78, 0.095);
+      // Dual-latch ejector clips at top and bottom
+      const clipTop = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.05, 0.10), silverMetal);
+      clipTop.position.set(slotX, 1.45, 0.09);
+      const clipBtm = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.05, 0.10), silverMetal);
+      clipBtm.position.set(slotX, 0.11, 0.09);
+      moboGroup.add(slot, armorStrip, clipTop, clipBtm);
+    }
+
+    // 1.8 PCIe Expansion Slots (PCIe 5.0 Steel Armor)
+    // PCIe 1 (PCIe 5.0 x16 - Primary GPU Slot)
+    const pcie1Armor = new THREE.Mesh(new THREE.BoxGeometry(1.48, 0.11, 0.11), chromeSteel);
+    pcie1Armor.position.set(-0.3, -0.35, 0.08);
+    const pcie1Slot = new THREE.Mesh(new THREE.BoxGeometry(1.36, 0.04, 0.12), darkMetal);
+    pcie1Slot.position.set(-0.32, -0.35, 0.085);
+    const pcie1Clip = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.14, 0.12), gunmetal);
+    pcie1Clip.position.set(0.48, -0.35, 0.08);
+    // PCIe 2 (PCIe 4.0 x16 - Secondary)
+    const pcie2Armor = new THREE.Mesh(new THREE.BoxGeometry(1.48, 0.10, 0.09), silverMetal);
+    pcie2Armor.position.set(-0.3, -1.05, 0.08);
+    // PCIe 3 (PCIe 3.0 x1)
+    const pcie3 = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.08, 0.08), darkMetal);
+    pcie3.position.set(-0.45, -0.70, 0.07);
+    moboGroup.add(pcie1Armor, pcie1Slot, pcie1Clip, pcie2Armor, pcie3);
+
+    // 1.9 M.2 Shield Frozr Heatsinks (Gen 5 Top Plate & Multi-Slot Lower Armor)
+    const m2TopPlate = new THREE.Mesh(new THREE.BoxGeometry(0.96, 0.26, 0.075), titaniumDark);
+    m2TopPlate.position.set(-0.15, 0.16, 0.085);
+    const m2TopCarbon = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.05, 0.08), carbonMat);
+    m2TopCarbon.position.set(-0.15, 0.16, 0.09);
+    [-0.55, 0.25].forEach(sX => {
+      const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.02, 12), silverMetal);
+      screw.rotation.x = Math.PI / 2;
+      screw.position.set(sX, 0.16, 0.125);
+      moboGroup.add(screw);
+    });
+
+    const m2LowerPlate = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.38, 0.07), gunmetal);
+    m2LowerPlate.position.set(-0.15, -0.70, 0.08);
+    const m2LowerGroove = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.03, 0.075), titaniumDark);
+    m2LowerGroove.position.set(-0.15, -0.70, 0.085);
+    moboGroup.add(m2TopPlate, m2TopCarbon, m2LowerPlate, m2LowerGroove);
+
+    // 1.10 Dedicated Audio Boost 5 Section (Bottom-Left Isolated Island)
+    const audioShield = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 0.06), silverMetal);
+    audioShield.position.set(-0.95, -1.15, 0.07);
+    // 4x High-Grade Gold Audio Capacitors
+    for (let a = 0; a < 4; a++) {
+      const goldCap = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.036, 0.09, 14), audioGoldCap);
+      goldCap.rotation.x = Math.PI / 2;
+      goldCap.position.set(-0.80, -1.02 - a * 0.09, 0.09);
+      moboGroup.add(goldCap);
+    }
+    moboGroup.add(audioShield);
+
+    // 1.11 Z790 Chipset Heatsink with ARGB "MPG" Badge
+    const chipset = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.68, 0.18), titaniumDark);
+    chipset.position.set(0.66, -0.92, 0.12);
+    const chipsetCarbon = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.55, 0.015), carbonMat);
+    chipsetCarbon.position.set(0.66, -0.92, 0.215);
+    const chipsetGlow = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.10, 0.20), this.createRgbMaterial(0x00f0ff, 1.5));
+    chipsetGlow.position.set(0.66, -0.92, 0.125);
+    moboGroup.add(chipset, chipsetCarbon, chipsetGlow);
+
+    // 1.12 CMOS Battery CR2032 in Socket Holder
+    const cmosSocket = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.04, 24), darkMetal);
+    cmosSocket.rotation.x = Math.PI / 2;
+    cmosSocket.position.set(-0.85, -0.65, 0.065);
+    const cmosCell = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.05, 24), silverMetal);
+    cmosCell.rotation.x = Math.PI / 2;
+    cmosCell.position.set(-0.85, -0.65, 0.075);
+    moboGroup.add(cmosSocket, cmosCell);
+
+    // 1.13 Motherboard Edge Connectors & Headers
+    // 6x SATA 6Gbps Ports (3 Dual-Stacked Right-Angle Ports at Right Edge)
+    for (let s = 0; s < 3; s++) {
+      const sata = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.12, 0.11), darkMetal);
+      sata.position.set(1.20, -0.62 - s * 0.16, 0.09);
+      moboGroup.add(sata);
+    }
+    // 24-Pin ATX Main Power Header with Gold Pin Dots
+    const atxHeader = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.62, 0.18), darkMetal);
+    atxHeader.position.set(1.15, 0.58, 0.11);
     moboGroup.add(atxHeader);
+    // Dual 8-Pin CPU Power Headers at Top Edge
+    [-0.82, -0.64].forEach(xP => {
+      const cpu8Pin = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.12, 0.16), darkMetal);
+      cpu8Pin.position.set(xP, 1.52, 0.11);
+      moboGroup.add(cpu8Pin);
+    });
+    // Front Panel USB 3.2 Header
+    const usbFront = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.18, 0.14), darkMetal);
+    usbFront.position.set(1.15, 0.05, 0.10);
+    // EZ Debug LEDs (4 Micro-LED squares: CPU, DRAM, VGA, BOOT)
+    const ezLeds = [0xff1e56, 0xf59e0b, 0x00f0ff, 0x10b981];
+    ezLeds.forEach((col, idx) => {
+      const led = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.02), this.createRgbMaterial(col, 1.2));
+      led.position.set(1.15, 0.95 + idx * 0.035, 0.06);
+      moboGroup.add(led);
+    });
+    moboGroup.add(usbFront);
 
     this.registerPart('mobo', moboGroup, {
       assembledPos: new THREE.Vector3(-0.38, 0.42, -0.82),
@@ -857,6 +1198,42 @@ class PCBuilder3DScene {
     }
     this.pcRoot.visible = true;
     this.resetCameraOverview();
+  }
+
+  exportPartGlb(partId = 'mobo', filename = 'MSI_MPG_Z790_CARBON_WIFI.glb', onSuccess, onError) {
+    if (!THREE.GLTFExporter) {
+      if (onError) onError('GLTFExporter library belum dimuat.');
+      return;
+    }
+    const part = this.partGroups[partId];
+    if (!part) {
+      if (onError) onError(`Komponen ${partId} tidak ditemukan.`);
+      return;
+    }
+
+    // Clone part cleanly at origin for an isolated export
+    const exportRoot = new THREE.Group();
+    const clone = part.clone(true);
+    clone.position.set(0, 0, 0);
+    clone.rotation.set(0, 0, 0);
+    exportRoot.add(clone);
+
+    const exporter = new THREE.GLTFExporter();
+    exporter.parse(
+      exportRoot,
+      (result) => {
+        const blob = new Blob([result], { type: 'application/octet-stream' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        if (onSuccess) onSuccess(filename);
+      },
+      { binary: true, embedImages: true }
+    );
   }
 
   /* --------------------------------------------------------------------------

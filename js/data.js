@@ -11,27 +11,55 @@ window.PC_DATA = {
       name: 'Motherboard (Papan Induk)',
       shortName: 'Motherboard',
       category: 'Sirkuit Utama & Konektivitas',
-      model: 'ATX Z790 CyberCore WiFi DDR5',
-      wattage: 45,
+      model: 'MSI MPG Z790 CARBON WIFI (LGA1700, DDR5, PCIe 5.0)',
+      wattage: 50,
       icon: '🎛️',
       audioFile: 'assets/audio/vo_mobo.mp3',
-      voiceOverText: 'Motherboard atau papan induk adalah sirkuit utama komputer yang menghubungkan seluruh komponen perangkat keras seperti prosesor, RAM, kartu grafis, dan penyimpanan agar dapat saling berkomunikasi.',
-      description: 'Motherboard adalah papan sirkuit cetak (PCB) utama yang menjadi tulang punggung sistem komputer. Seluruh komponen seperti CPU, RAM, GPU, dan SSD terpasang dan berkomunikasi melalui jalur sirkuit (bus) pada motherboard.',
-      howItWorks: 'Chipset pada motherboard mengatur lalu lintas data berkecepatan tinggi antara prosesor, memori RAM, slot ekspansi PCIe, serta konektor penyimpanan NVMe dan port I/O belakang.',
-      installTip: 'Pasang I/O shield terlebih dahulu pada casing, lalu letakkan motherboard di atas baut penyangga (standoff) kuningan agar bagian bawah sirkuit tidak mengalami korsleting.',
+      voiceOverText: 'Motherboard MSI MPG Z790 CARBON WIFI adalah papan sirkuit utama kelas antusias dengan tema stealth carbon-black. Dilengkapi sistem daya 19 plus 1 plus 1 fasa, slot ekspansi PCIe 5.0 Steel Armor, pendingin M.2 Shield Frozr, serta 4 slot memori DDR5.',
+      description: 'Motherboard adalah papan sirkuit cetak (PCB) utama yang menjadi tulang punggung dan saraf pusat sistem komputer. Model MSI MPG Z790 CARBON WIFI hadir dengan tema premium stealth black, aksen carbon-fiber, pelindung I/O terintegrasi beriluminasi Mystic Light ARGB, serta pendinginan termal tingkat tinggi untuk prosesor Intel generasi 12 hingga 14.',
+      howItWorks: 'Chipset Intel Z790 mengatur jalur komunikasi data kecepatan tinggi antara prosesor (CPU), memori RAM DDR5, kartu grafis melalui jalur PCIe 5.0 x16 (hingga 128 GB/s), serta 5 slot SSD NVMe M.2 dan deretan port I/O belakang.',
+      installTip: 'Pastikan memasang baut standoff kuningan pada 9 titik standar ATX di dalam casing sebelum meletakkan motherboard agar tidak terjadi korsleting. Kencangkan baut secara menyilang (diagonal) dengan tekanan rata.',
       specs: [
-        { label: 'Form Factor', val: 'ATX (30.5 x 24.4 cm)' },
-        { label: 'Socket CPU', val: 'LGA 1700 / AM5' },
-        { label: 'Slot Memori', val: '4x DDR5 Dual-Channel' },
-        { label: 'Slot Ekspansi', val: 'PCIe 5.0 x16 & 3x M.2' }
+        { label: 'Form Factor', val: 'Standard ATX (30.5 x 24.4 cm)' },
+        { label: 'Socket CPU', val: 'Intel LGA 1700 (12/13/14th Gen)' },
+        { label: 'VRM Power Delivery', val: '19+1+1 Duet Rail (90A SPS)' },
+        { label: 'Slot Memori RAM', val: '4x DDR5 Dual-Channel (7600+ MHz OC)' },
+        { label: 'Slot Ekspansi', val: '1x PCIe 5.0 x16 Steel Armor, 1x PCIe 4.0 x16' },
+        { label: 'Slot Storage M.2', val: '5x M.2 NVMe (1x Gen 5 + 4x Gen 4 Frozr)' },
+        { label: 'Audio & LAN', val: 'Audio Boost 5 (ALC4080) & Intel 2.5G LAN + Wi-Fi 6E' },
+        { label: 'Lighting RGB', val: 'MSI Mystic Light ARGB Sync' }
       ],
       svg: `<svg viewBox="0 0 64 64" width="54" height="54" fill="none">
-        <rect x="8" y="6" width="48" height="52" rx="4" fill="#0f172a" stroke="#00f0ff" stroke-width="2"/>
-        <rect x="20" y="14" width="16" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
-        <line x1="42" y1="12" x2="42" y2="32" stroke="#a855f7" stroke-width="2.5"/>
-        <line x1="47" y1="12" x2="47" y2="32" stroke="#a855f7" stroke-width="2.5"/>
-        <rect x="14" y="38" width="32" height="5" rx="1" fill="#00f0ff"/>
-        <circle cx="46" cy="49" r="4" fill="#64748b" stroke="#cbd5e1" stroke-width="1.2"/>
+        <rect x="7" y="5" width="50" height="54" rx="4" fill="#090d16" stroke="#00f0ff" stroke-width="1.8"/>
+        <!-- Rear I/O Shroud with Carbon Texture -->
+        <path d="M7 5 H22 V28 H15 V38 H7 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+        <polygon points="10,10 18,10 14,16" fill="#00f0ff" opacity="0.85"/>
+        <text x="9" y="24" font-family="monospace" font-size="4.2" font-weight="bold" fill="#00f0ff">MPG</text>
+        <!-- Top VRM Heatsink -->
+        <rect x="23" y="7" width="22" height="7" rx="1.5" fill="#334155" stroke="#64748b" stroke-width="1"/>
+        <line x1="26" y1="9" x2="26" y2="12" stroke="#00f0ff" stroke-width="1"/>
+        <line x1="30" y1="9" x2="30" y2="12" stroke="#00f0ff" stroke-width="1"/>
+        <line x1="34" y1="9" x2="34" y2="12" stroke="#00f0ff" stroke-width="1"/>
+        <!-- CPU Socket LGA1700 -->
+        <rect x="23" y="16" width="16" height="16" rx="2" fill="#0f172a" stroke="#cbd5e1" stroke-width="1.4"/>
+        <rect x="26" y="19" width="10" height="10" rx="1" fill="#f59e0b" opacity="0.6"/>
+        <line x1="39.5" y1="17" x2="39.5" y2="31" stroke="#e2e8f0" stroke-width="1.5"/>
+        <!-- 4x DDR5 Memory Boost Slots -->
+        <line x1="43" y1="12" x2="43" y2="34" stroke="#a855f7" stroke-width="1.8"/>
+        <line x1="46" y1="12" x2="46" y2="34" stroke="#00f0ff" stroke-width="1.8"/>
+        <line x1="49" y1="12" x2="49" y2="34" stroke="#a855f7" stroke-width="1.8"/>
+        <line x1="52" y1="12" x2="52" y2="34" stroke="#00f0ff" stroke-width="1.8"/>
+        <!-- PCIe 5.0 Steel Armor Slot -->
+        <rect x="12" y="38" width="34" height="4.5" rx="1" fill="#e2e8f0" stroke="#00f0ff" stroke-width="1.2"/>
+        <line x1="14" y1="40.2" x2="42" y2="40.2" stroke="#0f172a" stroke-width="1.5"/>
+        <!-- M.2 Shield Frozr Plates -->
+        <rect x="23" y="33.5" width="18" height="3" rx="0.8" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+        <!-- Chipset Heatsink MPG -->
+        <polygon points="40,43 54,43 54,55 42,55" fill="#1e293b" stroke="#00f0ff" stroke-width="1.2"/>
+        <text x="44" y="50" font-family="monospace" font-size="3.8" font-weight="bold" fill="#00f0ff">MPG</text>
+        <!-- Isolated Audio Trace Line -->
+        <path d="M7 44 Q14 44 14 58" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="2 1"/>
+        <circle cx="10" cy="52" r="2.2" fill="#f59e0b" stroke="#fff" stroke-width="0.6"/>
       </svg>`
     },
     {
@@ -218,13 +246,72 @@ window.PC_DATA = {
     }
   ],
 
+  motherboardFormFactors: [
+    {
+      id: 'eatx',
+      name: 'Extended ATX (E-ATX)',
+      shortCode: 'E-ATX',
+      dimensions: '30.5 x 33.0 cm (12 x 13.0 inci)',
+      ramSlots: '4 hingga 8 Slot DDR5/DDR4',
+      pcieSlots: '4 - 7 Slot PCIe x16 / x8',
+      casing: 'Full-Tower / Super-Tower',
+      badge: 'Workstation & Extreme',
+      badgeColor: '#ec4899',
+      pros: 'Maksimal ekspansi multi-GPU, slot RAM melimpah hingga 256GB+, dan VRM pendinginan raksasa.',
+      cons: 'Dimensi sangat lebar, bobot berat, memerlukan casing Full-Tower berharga tinggi.',
+      useCase: 'Workstation rendering 3D, server AI/komputasi data, dan PC gaming kelas sultan.'
+    },
+    {
+      id: 'atx',
+      name: 'Standard ATX (MSI MPG Z790)',
+      shortCode: 'ATX',
+      dimensions: '30.5 x 24.4 cm (12 x 9.6 inci)',
+      ramSlots: '4 Slot DDR5 Dual-Channel',
+      pcieSlots: '3 - 4 Slot PCIe (1x PCIe 5.0 Steel Armor)',
+      casing: 'Mid-Tower & Full-Tower',
+      badge: 'Standar Paling Populer',
+      badgeColor: '#00f0ff',
+      pros: 'Keseimbangan terbaik antara ukuran, slot ekspansi M.2 melimpah (5x), pendinginan optimal, dan tata letak port lapang.',
+      cons: 'Membutuhkan casing minimal Mid-Tower standar, tidak cocok untuk PC mini portabel.',
+      useCase: 'PC Gaming modern, multimedia editing studio, dan komputer serbaguna.'
+    },
+    {
+      id: 'matx',
+      name: 'Micro-ATX (mATX)',
+      shortCode: 'mATX',
+      dimensions: '24.4 x 24.4 cm (9.6 x 9.6 inci)',
+      ramSlots: '2 hingga 4 Slot DDR5/DDR4',
+      pcieSlots: '2 - 3 Slot PCIe',
+      casing: 'Mini-Tower, Mid-Tower & Full-Tower',
+      badge: 'Best Value & Ringkas',
+      badgeColor: '#10b981',
+      pros: 'Harga lebih ekonomis, muat di casing yang lebih ringkas namun tetap memiliki performa gaming tinggi.',
+      cons: 'Slot PCIe lebih sedikit (hanya 4 baris slot ekspansi), port M.2 biasanya hanya 2-3 slot.',
+      useCase: 'PC rakitan mahasiswa, PC lab multimedia kampus, dan PC gaming budget to mid-range.'
+    },
+    {
+      id: 'itx',
+      name: 'Mini-ITX (mITX)',
+      shortCode: 'Mini-ITX',
+      dimensions: '17.0 x 17.0 cm (6.7 x 6.7 inci)',
+      ramSlots: '2 Slot RAM',
+      pcieSlots: 'Hanya 1 Slot PCIe x16',
+      casing: 'Mini-ITX / Small Form Factor (SFF)',
+      badge: 'Ultra Kompak & Portabel',
+      badgeColor: '#a855f7',
+      pros: 'Sangat mungil, bisa dimasukkan ke dalam ransel atau diletakkan rapi di ruang tamu seperti konsol.',
+      cons: 'Hanya muat 1 GPU, kapasitas RAM maksimal 2 keping, dan membutuhkan manajemen suhu yang cermat.',
+      useCase: 'PC gaming portabel (mudah dibawa bepergian), Home Theater PC (HTPC), dan workstation minimalis meja sempit.'
+    }
+  ],
+
   assemblySteps: [
     {
       step: 1,
       partId: 'mobo',
-      title: 'Pasang Motherboard ke Casing',
-      instruction: 'Letakkan Motherboard ATX di atas baut standoff di dalam Casing dan kencangkan.',
-      successMsg: 'Motherboard terpasang kokoh di dalam Casing!'
+      title: 'Pasang Motherboard MSI MPG ke Casing',
+      instruction: 'Pasang I/O shield, sejajarkan 9 lubang standoff baut ATX di dalam Casing, letakkan Motherboard MSI MPG Z790, lalu kencangkan baut pengunci.',
+      successMsg: 'Motherboard MSI MPG Z790 CARBON WIFI terpasang kokoh di atas baut standoff Casing!'
     },
     {
       step: 2,

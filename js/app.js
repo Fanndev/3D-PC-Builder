@@ -254,6 +254,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     audio.stopVoiceOver();
 
+    const isMobo = partId === 'mobo';
+
     container.innerHTML = `
       <div class="detail-visual-card">
         <div class="detail-svg-wrap">${comp.svg}</div>
@@ -270,6 +272,17 @@ document.addEventListener('DOMContentLoaded', () => {
         </button>
         <span class="vo-status" id="part-vo-status">Narasi Audio Siap</span>
       </div>
+
+      ${isMobo ? `
+        <div class="inspector-actions-row">
+          <button class="btn-inspector-action" id="btn-open-form-factors">
+            📐 Komparasi Form Factor
+          </button>
+          <button class="btn-inspector-action" id="btn-export-mobo-glb">
+            💾 Unduh Model 3D .GLB
+          </button>
+        </div>
+      ` : ''}
 
       <div class="detail-section-label">Deskripsi & Fungsi Utama</div>
       <p class="detail-text">${comp.description}</p>
@@ -306,7 +319,99 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+
+    if (isMobo) {
+      document.getElementById('btn-open-form-factors')?.addEventListener('click', () => {
+        audio.playClick();
+        openFormFactorsModal();
+      });
+
+      document.getElementById('btn-export-mobo-glb')?.addEventListener('click', () => {
+        audio.playClick();
+        showToast('⏳ Mengekspor Model 3D MSI MPG Z790 (.GLB)...');
+        scene3d.exportPartGlb(
+          'mobo',
+          'MSI_MPG_Z790_CARBON_WIFI.glb',
+          (fn) => showToast(`✅ Model 3D ${fn} berhasil diunduh!`),
+          (err) => showToast(`⚠️ ${err}`)
+        );
+      });
+    }
   }
+
+  /* --------------------------------------------------------------------------
+     FORM FACTOR COMPARISON MODAL
+     -------------------------------------------------------------------------- */
+  function openFormFactorsModal() {
+    const modal = document.getElementById('modal-form-factors');
+    const content = document.getElementById('form-factors-content');
+    if (!modal || !content) return;
+
+    const sizeScaleMap = {
+      'eatx': { w: 76, h: 84 },
+      'atx': { w: 66, h: 84 },
+      'matx': { w: 66, h: 66 },
+      'itx': { w: 46, h: 46 }
+    };
+
+    content.innerHTML = `
+      <div class="form-factor-grid">
+        ${DATA.motherboardFormFactors.map(ff => {
+          const dims = sizeScaleMap[ff.id] || { w: 60, h: 60 };
+          const isActive = ff.id === 'atx';
+          return `
+            <div class="ff-card ${isActive ? 'active-model' : ''}">
+              <div class="ff-badge" style="background:${ff.badgeColor}22; color:${ff.badgeColor}; border:1px solid ${ff.badgeColor}44;">
+                ${ff.badge}
+              </div>
+              <div class="ff-title">${ff.name}</div>
+              <div class="ff-dim">📏 ${ff.dimensions}</div>
+
+              <div class="ff-visual-box">
+                <div class="ff-box-inner" style="width:${dims.w}px; height:${dims.h}px; border-color:${ff.badgeColor}; background:${ff.badgeColor}26;">
+                  ${ff.shortCode}
+                </div>
+              </div>
+
+              <div class="ff-info-row"><strong>Slot RAM:</strong> ${ff.ramSlots}</div>
+              <div class="ff-info-row"><strong>Slot PCIe:</strong> ${ff.pcieSlots}</div>
+              <div class="ff-info-row"><strong>Tipe Casing:</strong> ${ff.casing}</div>
+
+              <div class="ff-desc-box">
+                <div style="margin-bottom:6px;"><strong style="color:#a7f3d0;">✓ Kelebihan:</strong> ${ff.pros}</div>
+                <div><strong style="color:#fbcfe8;">🎯 Penggunaan:</strong> ${ff.useCase}</div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    modal.classList.add('show');
+  }
+
+  function closeFormFactorsModal() {
+    const modal = document.getElementById('modal-form-factors');
+    modal?.classList.remove('show');
+  }
+
+  document.getElementById('btn-close-ff-modal')?.addEventListener('click', closeFormFactorsModal);
+  document.getElementById('btn-modal-understand')?.addEventListener('click', closeFormFactorsModal);
+  document.getElementById('modal-form-factors')?.addEventListener('click', (e) => {
+    if (e.target.id === 'modal-form-factors') closeFormFactorsModal();
+  });
+
+  // Top Nav Download Button
+  document.getElementById('btn-download-mobo-glb')?.addEventListener('click', () => {
+    audio.playClick();
+    showToast('⏳ Mengekspor Model 3D MSI MPG Z790 (.GLB)...');
+    scene3d.exportPartGlb(
+      'mobo',
+      'MSI_MPG_Z790_CARBON_WIFI.glb',
+      (fn) => showToast(`✅ Model 3D ${fn} berhasil diunduh!`),
+      (err) => showToast(`⚠️ ${err}`)
+    );
+  });
 
   renderPartsList();
   renderPartInspector(activePartId);
@@ -332,16 +437,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const isNext = idx === currentStepIndex;
       return `
         <div class="assembly-step-card ${isInstalled ? 'installed' : ''} ${isNext ? 'next-up' : ''}">
-          <div style="display:flex; align-items:center; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
             <div class="step-num-circle">${isInstalled ? '✓' : s.step}</div>
             <div>
               <div style="font-size:12.5px; font-weight:700;">${s.title}</div>
               <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">${s.instruction}</div>
             </div>
           </div>
-          <button class="install-action-btn" data-step-idx="${idx}" ${isInstalled ? 'disabled' : ''}>
-            ${isInstalled ? 'Terpasang' : 'Pasang 3D'}
-          </button>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="btn-step-narrate" data-step-idx="${idx}" title="Dengarkan panduan suara langkah ini">
+              🔊
+            </button>
+            <button class="install-action-btn" data-step-idx="${idx}" ${isInstalled ? 'disabled' : ''}>
+              ${isInstalled ? 'Terpasang' : 'Pasang 3D'}
+            </button>
+          </div>
         </div>
       `;
     }).join('');
@@ -350,6 +460,17 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', () => {
         const idx = parseInt(btn.dataset.stepIdx, 10);
         handleInstallStep(idx);
+      });
+    });
+
+    stepsContainer.querySelectorAll('.btn-step-narrate').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.stepIdx, 10);
+        const s = DATA.assemblySteps[idx];
+        audio.playClick();
+        audio.speakWithBrowserTTS(`Langkah ${s.step}. ${s.title}. ${s.instruction}`);
+        showToast(`🔊 Memutar instruksi Langkah ${s.step}...`);
       });
     });
   }
