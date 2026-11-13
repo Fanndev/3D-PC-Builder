@@ -63,24 +63,26 @@ class PCBuilder3DScene {
     this.camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
     this.camera.position.copy(this.camTargetPos);
 
-    // 3. Renderer
+    // 3. High-Performance Optimized Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     this.renderer.setSize(width, height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.22;
     this.container.appendChild(this.renderer.domElement);
 
-    // 4. OrbitControls
+    // 4. Smooth Damped OrbitControls
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.06;
+    this.controls.dampingFactor = 0.08;
     this.controls.maxDistance = 18;
     this.controls.minDistance = 2.4;
     this.controls.maxPolarAngle = Math.PI * 0.85;
     this.controls.target.copy(this.camTargetLook);
+
+    this.hotspotsVisible = true;
 
     this.controls.addEventListener('start', () => {
       this.isCameraAnimating = false;
@@ -111,8 +113,8 @@ class PCBuilder3DScene {
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.45);
     keyLight.position.set(8, 12, 10);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 2048;
-    keyLight.shadow.mapSize.height = 2048;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
     this.scene.add(keyLight);
 
     const rimLightCyan = new THREE.DirectionalLight(0x00f0ff, 0.85);
@@ -362,6 +364,133 @@ class PCBuilder3DScene {
     return new THREE.CanvasTexture(canvas);
   }
 
+  createCarbonMaxTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+
+    // Deep stealth black background
+    ctx.fillStyle = '#0a0f1d';
+    ctx.fillRect(0, 0, 512, 128);
+
+    // Diagonal carbon fiber lines
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 2;
+    for (let x = -128; x < 512 + 128; x += 12) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x + 128, 128);
+      ctx.stroke();
+    }
+
+    // Top border accent
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(16, 8);
+    ctx.lineTo(496, 8);
+    ctx.stroke();
+
+    // Laser-etched [ CARBON MAX ] text matching MSI MPG Reference
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 36px "Courier New", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('[ CARBON MAX ]', 256, 56);
+
+    // Subtext
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = 'bold 15px monospace';
+    ctx.fillText('LIGHTNING GEN 5 M.2 • 128 GB/s', 256, 90);
+
+    // Corner screw mounts
+    [40, 472].forEach(x => {
+      ctx.fillStyle = '#64748b';
+      ctx.beginPath();
+      ctx.arc(x, 64, 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#94a3b8';
+      ctx.stroke();
+    });
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.anisotropy = 4;
+    return tex;
+  }
+
+  createDebugLedTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#020617';
+    ctx.fillRect(0, 0, 128, 64);
+
+    // Dual 7-segment display bezel
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(4, 4, 120, 56);
+
+    // Inactive segment ghost
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.15)';
+    ctx.font = 'bold 44px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('88', 64, 48);
+
+    // Active POST / Temp display: '8.8' (matching MSI MPG Reference)
+    ctx.fillStyle = '#ff1e56';
+    ctx.shadowColor = '#ff1e56';
+    ctx.shadowBlur = 10;
+    ctx.fillText('8.8', 64, 48);
+
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  createChipsetShieldTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Matrix dot ventilation grid matching Image 2
+    ctx.fillStyle = '#38bdf8';
+    for (let r = 0; r < 14; r++) {
+      for (let c = 0; c < 14; c++) {
+        if ((r + c) % 2 === 0 && r > 2 && c > 2) {
+          ctx.beginPath();
+          ctx.arc(40 + c * 30, 40 + r * 30, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    // Diagonal racing stripes
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(40, 480);
+    ctx.lineTo(480, 40);
+    ctx.stroke();
+
+    // Stylized MPG Emblem
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 54px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('MPG', 340, 340);
+
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = 'bold 20px monospace';
+    ctx.fillText('Z790 CHIPSET', 340, 380);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.anisotropy = 4;
+    return tex;
+  }
+
   createSpinningFan(radius = 0.42, thickness = 0.08) {
     const fanGroup = new THREE.Group();
 
@@ -515,7 +644,7 @@ class PCBuilder3DScene {
     const pcbBoard = new THREE.Mesh(new THREE.BoxGeometry(2.55, 3.2, 0.09), pcbMat);
     moboGroup.add(pcbBoard);
 
-    // 1.2 MSI Extended Rear I/O Shroud & Shield Armor
+    // 1.2 MSI Extended Rear I/O Shroud & Shield Armor (Faceted Stealth Black matching Image Reference)
     const ioArmor = new THREE.Mesh(new THREE.BoxGeometry(0.46, 1.48, 0.36), titaniumDark);
     ioArmor.position.set(-1.04, 0.84, 0.22);
     const ioBevel = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.20, 0.35), gunmetal);
@@ -524,13 +653,35 @@ class PCBuilder3DScene {
     const ioCarbonInlay = new THREE.Mesh(new THREE.BoxGeometry(0.36, 1.25, 0.015), carbonMat);
     ioCarbonInlay.position.set(-1.04, 0.84, 0.405);
 
-    // Illuminated ARGB MSI Dragon Crest / "MPG" Emblem (Reactive to Active RGB Theme)
-    const ioRgbEmblem = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.32, 0.02), this.createRgbMaterial(0x00f0ff, 1.6));
-    ioRgbEmblem.position.set(-1.04, 0.95, 0.415);
-    const ioRgbSlash = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.65, 0.02), this.createRgbMaterial(0x00f0ff, 1.4));
+    // Mirrored Glass Dragon Plate with ARGB Mystic Light Glow (Matching Reference Image)
+    const ioDragonPlate = new THREE.Mesh(
+      new THREE.BoxGeometry(0.28, 0.46, 0.025),
+      new THREE.MeshPhysicalMaterial({
+        color: 0x030712,
+        metalness: 0.90,
+        roughness: 0.06,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.05
+      })
+    );
+    ioDragonPlate.rotation.z = 0.12;
+    ioDragonPlate.position.set(-1.02, 1.04, 0.42);
+
+    const ioDragonGlow = new THREE.Mesh(
+      new THREE.BoxGeometry(0.22, 0.36, 0.015),
+      this.createRgbMaterial(0x00f0ff, 1.6)
+    );
+    ioDragonGlow.rotation.z = 0.12;
+    ioDragonGlow.position.set(-1.02, 1.04, 0.43);
+
+    // Silver "msi" badge below dragon plate
+    const msiBadge = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.06, 0.02), chromeSteel);
+    msiBadge.position.set(-1.02, 0.72, 0.42);
+
+    const ioRgbSlash = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.55, 0.02), this.createRgbMaterial(0x00f0ff, 1.4));
     ioRgbSlash.rotation.z = 0.35;
-    ioRgbSlash.position.set(-0.92, 0.52, 0.41);
-    moboGroup.add(ioArmor, ioBevel, ioCarbonInlay, ioRgbEmblem, ioRgbSlash);
+    ioRgbSlash.position.set(-0.92, 0.48, 0.41);
+    moboGroup.add(ioArmor, ioBevel, ioCarbonInlay, ioDragonPlate, ioDragonGlow, msiBadge, ioRgbSlash);
 
     // 1.3 Rear I/O Shield Ports Array (Facing Back -X)
     // Wi-Fi 6E/7 Dual Gold Antenna SMA Connectors
@@ -595,6 +746,9 @@ class PCBuilder3DScene {
     vrmTop.position.set(-0.20, 1.38, 0.18);
     const vrmTopCarbon = new THREE.Mesh(new THREE.BoxGeometry(0.96, 0.08, 0.015), carbonMat);
     vrmTopCarbon.position.set(-0.20, 1.38, 0.325);
+    // Silver "MPG" Badge on Top VRM Heatsink
+    const mpgVrmBadge = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.08, 0.02), chromeSteel);
+    mpgVrmBadge.position.set(-0.20, 1.42, 0.33);
 
     // Interconnecting Nickel-Plated Copper Heatpipe
     const pipeVert = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.60, 16), copperHeatpipe);
@@ -602,7 +756,7 @@ class PCBuilder3DScene {
     const pipeHoriz = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.76, 16), copperHeatpipe);
     pipeHoriz.rotation.z = Math.PI / 2;
     pipeHoriz.position.set(-0.24, 1.38, 0.33);
-    moboGroup.add(vrmLeft, vrmTop, vrmTopCarbon, pipeVert, pipeHoriz);
+    moboGroup.add(vrmLeft, vrmTop, vrmTopCarbon, mpgVrmBadge, pipeVert, pipeHoriz);
 
     // 1.5 VRM Power Delivery Phases (19+1+1 Duet Rail Phases: Chokes & Solid Caps)
     // Left chokes & caps
@@ -674,23 +828,30 @@ class PCBuilder3DScene {
     pcie3.position.set(-0.45, -0.70, 0.07);
     moboGroup.add(pcie1Armor, pcie1Slot, pcie1Clip, pcie2Armor, pcie3);
 
-    // 1.9 M.2 Shield Frozr Heatsinks (Gen 5 Top Plate & Multi-Slot Lower Armor)
-    const m2TopPlate = new THREE.Mesh(new THREE.BoxGeometry(0.96, 0.26, 0.075), titaniumDark);
-    m2TopPlate.position.set(-0.15, 0.16, 0.085);
-    const m2TopCarbon = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.05, 0.08), carbonMat);
-    m2TopCarbon.position.set(-0.15, 0.16, 0.09);
-    [-0.55, 0.25].forEach(sX => {
+    // 1.9 M.2 Shield Frozr Heatsinks & [ CARBON MAX ] Bar (Matching Reference Image)
+    const carbonMaxTex = this.createCarbonMaxTexture();
+    const carbonMaxMat = new THREE.MeshStandardMaterial({
+      map: carbonMaxTex,
+      roughness: 0.25,
+      metalness: 0.65
+    });
+    // Prominent [ CARBON MAX ] Heatsink Bar directly below LGA1700 Socket
+    const carbonMaxBar = new THREE.Mesh(new THREE.BoxGeometry(1.20, 0.28, 0.085), carbonMaxMat);
+    carbonMaxBar.position.set(-0.15, 0.20, 0.085);
+
+    [-0.60, 0.30].forEach(sX => {
       const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.02, 12), silverMetal);
       screw.rotation.x = Math.PI / 2;
-      screw.position.set(sX, 0.16, 0.125);
+      screw.position.set(sX, 0.20, 0.135);
       moboGroup.add(screw);
     });
 
+    // Lower M.2 Multi-Slot Shield Frozr Plate
     const m2LowerPlate = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.38, 0.07), gunmetal);
     m2LowerPlate.position.set(-0.15, -0.70, 0.08);
     const m2LowerGroove = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.03, 0.075), titaniumDark);
     m2LowerGroove.position.set(-0.15, -0.70, 0.085);
-    moboGroup.add(m2TopPlate, m2TopCarbon, m2LowerPlate, m2LowerGroove);
+    moboGroup.add(carbonMaxBar, m2LowerPlate, m2LowerGroove);
 
     // 1.10 Dedicated Audio Boost 5 Section (Bottom-Left Isolated Island)
     const audioShield = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 0.06), silverMetal);
@@ -704,14 +865,23 @@ class PCBuilder3DScene {
     }
     moboGroup.add(audioShield);
 
-    // 1.11 Z790 Chipset Heatsink with ARGB "MPG" Badge
-    const chipset = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.68, 0.18), titaniumDark);
-    chipset.position.set(0.66, -0.92, 0.12);
-    const chipsetCarbon = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.55, 0.015), carbonMat);
-    chipsetCarbon.position.set(0.66, -0.92, 0.215);
-    const chipsetGlow = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.10, 0.20), this.createRgbMaterial(0x00f0ff, 1.5));
-    chipsetGlow.position.set(0.66, -0.92, 0.125);
-    moboGroup.add(chipset, chipsetCarbon, chipsetGlow);
+    // 1.11 Z790 Chipset Heatsink with Polygonal Shield & Matrix Dots (Matching Reference Image)
+    const chipset = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.72, 0.16), titaniumDark);
+    chipset.position.set(0.66, -0.92, 0.11);
+
+    const chipsetShieldTex = this.createChipsetShieldTexture();
+    const chipsetShieldMat = new THREE.MeshStandardMaterial({
+      map: chipsetShieldTex,
+      roughness: 0.26,
+      metalness: 0.78
+    });
+    const chipsetFaceted = new THREE.Mesh(new THREE.BoxGeometry(0.80, 0.68, 0.04), chipsetShieldMat);
+    chipsetFaceted.position.set(0.66, -0.92, 0.19);
+    chipsetFaceted.rotation.z = -0.05;
+
+    const chipsetGlow = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.08, 0.02), this.createRgbMaterial(0x00f0ff, 1.5));
+    chipsetGlow.position.set(0.66, -0.92, 0.215);
+    moboGroup.add(chipset, chipsetFaceted, chipsetGlow);
 
     // 1.12 CMOS Battery CR2032 in Socket Holder
     const cmosSocket = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.04, 24), darkMetal);
@@ -742,6 +912,17 @@ class PCBuilder3DScene {
     // Front Panel USB 3.2 Header
     const usbFront = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.18, 0.14), darkMetal);
     usbFront.position.set(1.15, 0.05, 0.10);
+
+    // 1.14 Digital 2-Digit 7-Segment Debug LED ("8.8" POST / CPU Temp Display)
+    // Located at top-right corner above RAM slots matching Reference Image
+    const debugLedTex = this.createDebugLedTexture();
+    const debugLedMat = new THREE.MeshBasicMaterial({ map: debugLedTex });
+    const debugLedBezel = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.035), darkMetal);
+    debugLedBezel.position.set(0.96, 1.48, 0.075);
+    const debugLedScreen = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.10), debugLedMat);
+    debugLedScreen.position.set(0.96, 1.48, 0.095);
+    moboGroup.add(debugLedBezel, debugLedScreen);
+
     // EZ Debug LEDs (4 Micro-LED squares: CPU, DRAM, VGA, BOOT)
     const ezLeds = [0xff1e56, 0xf59e0b, 0x00f0ff, 0x10b981];
     ezLeds.forEach((col, idx) => {
@@ -947,8 +1128,27 @@ class PCBuilder3DScene {
     group.traverse(obj => {
       if (obj.isMesh) {
         obj.userData.partId = partId;
-        obj.castShadow = true;
-        obj.receiveShadow = true;
+        // Optimization: only major structural meshes cast/receive shadows to prevent rotation stutter
+        const mat = obj.material;
+        const isEmissive = mat && mat.emissive && typeof mat.emissive.getHex === 'function' && mat.emissive.getHex() > 0;
+        const isTransparent = mat && (mat.transparent || mat.opacity < 0.95);
+
+        if (isEmissive || isTransparent) {
+          obj.castShadow = false;
+          obj.receiveShadow = false;
+        } else {
+          // Bounding box size heuristic to filter out micro-geometry (screws, caps, chokes)
+          if (obj.geometry) {
+            if (!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
+            const bb = obj.geometry.boundingBox;
+            const maxDim = bb ? Math.max(bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z) : 1;
+            obj.castShadow = maxDim > 0.35;
+            obj.receiveShadow = maxDim > 0.40;
+          } else {
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+          }
+        }
       }
     });
 
@@ -967,9 +1167,10 @@ class PCBuilder3DScene {
       const pin = document.createElement('div');
       pin.className = `hotspot-pin ${comp.id === this.selectedPartId ? 'active' : ''}`;
       pin.dataset.partId = comp.id;
+      pin.title = `${comp.num}. ${comp.name}`;
       pin.innerHTML = `
         <span class="pin-dot">${comp.num}</span>
-        <span>${comp.shortName}</span>
+        <span class="pin-text">${comp.shortName}</span>
       `;
       pin.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -982,7 +1183,16 @@ class PCBuilder3DScene {
     });
   }
 
+  toggleHotspots(forceState) {
+    this.hotspotsVisible = forceState !== undefined ? forceState : !this.hotspotsVisible;
+    if (this.hotspotContainer) {
+      this.hotspotContainer.style.display = this.hotspotsVisible ? 'block' : 'none';
+    }
+    return this.hotspotsVisible;
+  }
+
   updateHotspotPositions() {
+    if (!this.hotspotsVisible || !this.hotspotContainer) return;
     const width = window.innerWidth;
     const height = window.innerHeight;
     const projVec = new THREE.Vector3();
@@ -1008,10 +1218,9 @@ class PCBuilder3DScene {
       }
 
       pin.classList.remove('hidden-pin');
-      const x = (projVec.x * 0.5 + 0.5) * width;
-      const y = (-(projVec.y * 0.5) + 0.5) * height;
-      pin.style.left = `${x}px`;
-      pin.style.top = `${y}px`;
+      const x = Math.round((projVec.x * 0.5 + 0.5) * width);
+      const y = Math.round((-(projVec.y * 0.5) + 0.5) * height);
+      pin.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
   }
 

@@ -5,6 +5,10 @@ Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
 
+# Python cache
+__pycache__/
+*.py[cod]
+
 # Editor directories and files
 .vscode/
 .idea/

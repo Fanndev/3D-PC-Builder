@@ -139,19 +139,29 @@
 
   <!-- VIEW 2: EKSPLORASI HARDWARE 3D -->
   <section class="view-section" id="view-explore">
+    <!-- Floating Quick Triggers when panels are collapsed -->
+    <button class="panel-trigger-pill left-trigger" id="btn-toggle-parts-list" style="display:none;" title="Tampilkan Daftar Komponen">
+      🧩 <span>Daftar Komponen</span>
+    </button>
+    <button class="panel-trigger-pill right-trigger" id="btn-toggle-inspector" style="display:none;" title="Tampilkan Detail Komponen">
+      📋 <span>Detail Komponen</span>
+    </button>
+
     <div class="explore-layout">
       <!-- Left: 8 Components List -->
-      <div class="glass-panel parts-list-panel">
+      <div class="glass-panel parts-list-panel" id="parts-list-panel">
         <div class="panel-header">
-          <div class="panel-title">🧩 Daftar Komponen 3D</div>
+          <div class="panel-title">🧩 Komponen 3D</div>
+          <button class="panel-collapse-btn" id="btn-collapse-parts-list" title="Sembunyikan Panel Komponen">◀</button>
         </div>
         <div class="panel-body" id="parts-list-container"></div>
       </div>
 
       <!-- Right: Component Inspector (Text, SVG, Voice-Over, Specs) -->
-      <div class="glass-panel part-detail-panel">
+      <div class="glass-panel part-detail-panel" id="part-detail-panel">
         <div class="panel-header">
-          <div class="panel-title">📋 Detail & Narasi Komponen</div>
+          <div class="panel-title">📋 Detail Komponen</div>
+          <button class="panel-collapse-btn" id="btn-close-inspector" title="Minimalkan Panel Detail">✕</button>
         </div>
         <div class="panel-body" id="part-inspector-content"></div>
       </div>
@@ -306,18 +316,24 @@
 
   <div class="viewport-hud-bottom">
     <button class="hud-btn" id="hud-btn-explode">
-      💥 Mode Bedah 3D (Exploded View)
+      💥 Bedah 3D
     </button>
     <button class="hud-btn" id="hud-btn-glass">
-      🪟 Buka Kaca Casing
+      🪟 Buka Kaca
     </button>
-    <div class="hud-divider"></div>
     <button class="hud-btn" id="hud-btn-rgb">
       <span class="rgb-swatch" style="background:#00f0ff;"></span>
-      <span>Tema RGB</span>
+      <span>RGB</span>
     </button>
     <button class="hud-btn active" id="hud-btn-power">
-      ⚡ Power: ON (Kipas Aktif)
+      ⚡ Daya: ON
+    </button>
+    <div class="hud-divider"></div>
+    <button class="hud-btn active" id="hud-btn-pins">
+      📌 Pin: ON
+    </button>
+    <button class="hud-btn" id="hud-btn-clean" title="Sembunyikan Semua Panel untuk Tampilan Penuh 360°">
+      👁️ Mode Bersih
     </button>
     <div class="hud-divider"></div>
     <button class="hud-btn" id="hud-btn-reset-cam">

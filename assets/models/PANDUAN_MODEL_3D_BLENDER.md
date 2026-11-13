@@ -1,4 +1,4 @@
-# 📦 Panduan Aset 3D Motherboard MSI MPG Z790 (Blender & GLB)
+# 📦 Panduan Aset 3D Motherboard MSI MPG Z790 CARBON MAX WIFI (Blender & GLB)
 
 Dokumen ini berisi panduan penggunaan dan ekspor aset 3D untuk memenuhi ketentuan luaran **Ujian Tengah Semester (UTS) Sistem Multimedia**:
 > *"File sudah jadi dan masih mentah (sesuai software yang digunakan)"*
@@ -6,7 +6,7 @@ Dokumen ini berisi panduan penggunaan dan ekspor aset 3D untuk memenuhi ketentua
 ---
 
 ## 🖥️ 1. File Mentah Blender (`.blend`) & Skrip Otomatis
-Di dalam folder `scripts/`, telah disediakan skrip generator otomatis untuk Blender:
+Di dalam folder `scripts/`, telah disediakan skrip generator otomatis untuk Blender yang diperbarui sesuai referensi **MSI MPG Z790 CARBON MAX WIFI**:
 * **Lokasi Skrip:** `scripts/generate_msi_mpg_blender.py`
 
 ### Cara Menjalankan di Blender (Versi 3.0 / 3.6 / 4.x):
@@ -15,10 +15,14 @@ Di dalam folder `scripts/`, telah disediakan skrip generator otomatis untuk Blen
 3. Klik tombol **Open** (atau buat file baru), lalu arahkan ke:  
    `scripts/generate_msi_mpg_blender.py`
 4. Tekan tombol **▶ Run Script** (atau shortcut `Alt + P`).
-5. **Hasil:**
-   * Seluruh hierarki objek 3D Motherboard **MSI MPG Z790 CARBON WIFI** langsung terbentuk secara presisi (PCB, VRM heatsinks, I/O shield, CPU socket LGA1700, DDR5 slots, PCIe Steel Armor, M.2 Shield Frozr, Audio Boost 5, Chipset heatsink, CMOS battery, SATA ports).
-   * Seluruh material PBR (Carbon Black, Brushed Titanium, Chrome Steel Armor, Gold Pins, Emissive Mystic Light ARGB) langsung disematkan.
-   * Studio lighting 3-titik (Key, Rim, Fill) serta kamera studio langsung diatur.
+5. **Fitur Visual yang Dihasilkan:**
+   * **Bevel Edge Modifiers & Auto-Smooth:** Setiap heatsink dan pelindung armor memiliki chamfer bevel halus sehingga memantulkan specular highlight realistis saat dirender di EEVEE maupun Cycles.
+   * **Plat Heatsink `[ CARBON MAX ]`:** Plat pendingin khusus di bawah soket LGA1700 dengan aksen serat karbon dan baut perak.
+   * **Mirror Dragon Plate & Mystic Light ARGB:** Pelindung I/O memiliki plat kaca facet reflektif dengan lambang naga MSI, badge perak "msi", dan pendaran ARGB cyan.
+   * **Digital 2-Digit 7-Segment Debug LED ("8.8"):** Tampilan digital status POST / temperatur di sudut kanan atas board.
+   * **PCIe 5.0 Steel Armor:** Slot kartu grafis diperkuat pelindung baja kromium dengan klip rilis XL.
+   * **VRM Heatsink & Heatpipe:** Pendingin daya ganda dengan lencana "MPG" dan pipa tembaga berpelapis nikel.
+   * **Studio Lighting 3-Titik & Lantai Pantul:** Key light, rim cyan, fill violet, dan kamera studio siap render (F12).
    * File mentah `assets/models/msi_mpg_z790_carbon.blend` dan file jadi `assets/models/msi_mpg_z790_carbon.glb` otomatis tersimpan!
 
 ---
@@ -40,3 +44,4 @@ Pada panel inspeksi Motherboard di website, terdapat tombol **"📐 Komparasi Fo
 * **Micro-ATX (24.4 x 24.4 cm):** Varian hemat ruang dan ekonomis.
 * **Mini-ITX (17.0 x 17.0 cm):** Varian ultra-kompak untuk PC portabel / konsol SFF.
 * **Extended ATX (30.5 x 33.0 cm):** Varian workstation dan extreme gaming.
+

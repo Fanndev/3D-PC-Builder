@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       activePartId = selectedPartId;
       renderPartsList();
       renderPartInspector(selectedPartId);
+      showPartInspector();
       if (currentView === 'home') {
         switchView('explore', false);
       }
@@ -193,6 +194,89 @@ document.addEventListener('DOMContentLoaded', () => {
     scene3d.resetCameraOverview();
   });
 
+  // HUD Hotspot Pins Toggle
+  const btnPins = document.getElementById('hud-btn-pins');
+  btnPins?.addEventListener('click', () => {
+    audio.playClick();
+    const visible = scene3d.toggleHotspots();
+    btnPins.classList.toggle('active', visible);
+    btnPins.innerHTML = visible ? '📌 Pin: ON' : '📌 Pin: OFF';
+    showToast(visible ? 'Pin Hotspot 3D Ditampilkan' : 'Pin Hotspot 3D Disembunyikan (Tampilan Bersih)');
+  });
+
+  // Panel Collapse / Expand Controls
+  const partsListPanel = document.getElementById('parts-list-panel');
+  const partDetailPanel = document.getElementById('part-detail-panel');
+  const btnTogglePartsList = document.getElementById('btn-toggle-parts-list');
+  const btnToggleInspector = document.getElementById('btn-toggle-inspector');
+
+  function collapsePartsList() {
+    partsListPanel?.classList.add('collapsed');
+    if (btnTogglePartsList) btnTogglePartsList.style.display = 'inline-flex';
+  }
+
+  function expandPartsList() {
+    partsListPanel?.classList.remove('collapsed');
+    if (btnTogglePartsList) btnTogglePartsList.style.display = 'none';
+  }
+
+  function collapsePartInspector() {
+    partDetailPanel?.classList.add('collapsed');
+    if (btnToggleInspector) btnToggleInspector.style.display = 'inline-flex';
+  }
+
+  function showPartInspector() {
+    partDetailPanel?.classList.remove('collapsed');
+    if (btnToggleInspector) btnToggleInspector.style.display = 'none';
+  }
+
+  document.getElementById('btn-collapse-parts-list')?.addEventListener('click', () => {
+    audio.playClick();
+    collapsePartsList();
+  });
+
+  btnTogglePartsList?.addEventListener('click', () => {
+    audio.playClick();
+    expandPartsList();
+  });
+
+  document.getElementById('btn-close-inspector')?.addEventListener('click', () => {
+    audio.playClick();
+    collapsePartInspector();
+  });
+
+  btnToggleInspector?.addEventListener('click', () => {
+    audio.playClick();
+    showPartInspector();
+  });
+
+  // Mode Bersih (Clean 3D Mode: minimizes both side panels & hides pins)
+  let isCleanMode = false;
+  const btnClean = document.getElementById('hud-btn-clean');
+  btnClean?.addEventListener('click', () => {
+    audio.playClick();
+    isCleanMode = !isCleanMode;
+    btnClean.classList.toggle('active', isCleanMode);
+
+    if (isCleanMode) {
+      btnClean.innerHTML = '👁️ Mode Normal';
+      collapsePartsList();
+      collapsePartInspector();
+      scene3d.toggleHotspots(false);
+      btnPins?.classList.remove('active');
+      if (btnPins) btnPins.innerHTML = '📌 Pin: OFF';
+      showToast('👁️ Mode Bersih Aktif: Tampilan 3D Penuh Tanpa Halangan!');
+    } else {
+      btnClean.innerHTML = '👁️ Mode Bersih';
+      expandPartsList();
+      showPartInspector();
+      scene3d.toggleHotspots(true);
+      btnPins?.classList.add('active');
+      if (btnPins) btnPins.innerHTML = '📌 Pin: ON';
+      showToast('Panel Informasi & Pin Hotspot Ditampilkan Kembali.');
+    }
+  });
+
   // Custom GLB 3D File Loader Input
   const glbInput = document.getElementById('input-custom-glb');
   document.getElementById('btn-upload-glb')?.addEventListener('click', () => {
@@ -242,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activePartId = partId;
         renderPartsList();
         renderPartInspector(partId);
+        showPartInspector();
         scene3d.focusOnPart(partId, false);
       });
     });
