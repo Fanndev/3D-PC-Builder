@@ -26,59 +26,103 @@
   <div id="toast-notification">Sistem Multimedia 3D Siap</div>
 
   <!-- ========================================================================
-       2. TOP GLASS NAVIGATION BAR
+       2. TOP FLOATING NAVIGATION (KONSEP A: FLOATING ISLAND & DYNAMIC TOOLS)
        ======================================================================== -->
-  <header class="top-navbar">
-    <div class="brand-box" onclick="document.querySelector('[data-view=home]').click()">
-      <div class="brand-logo">
-        <svg viewBox="0 0 28 28" width="22" height="22" fill="none">
+  <header class="top-floating-header">
+    <!-- Left: Minimalist Brand Island -->
+    <div class="brand-floating-pill" onclick="document.querySelector('[data-view=home]').click()" title="Kembali ke Beranda 3D">
+      <div class="brand-logo-mini">
+        <svg viewBox="0 0 28 28" width="18" height="18" fill="none">
           <rect x="3" y="3" width="22" height="22" rx="5" stroke="#00f0ff" stroke-width="2.2" />
           <rect x="9" y="9" width="10" height="10" rx="2" fill="#00f0ff" />
         </svg>
       </div>
-      <div>
-        <div class="brand-title">PC BUILDER 101 • 3D STUDIO</div>
-        <div class="brand-subtitle">UTS Sistem Multimedia • S1 Ilmu Komputer</div>
+      <div class="brand-name-wrap">
+        <span class="brand-name">PC BUILDER 101</span>
       </div>
     </div>
 
-    <nav class="nav-tabs">
-      <button class="nav-tab active" data-view="home">
-        <span>🏠 Beranda 3D</span>
+    <!-- Center: Main Navigation Floating Capsule (Dynamic Island) -->
+    <nav class="nav-floating-pill">
+      <button class="nav-tab active" data-view="home" title="Beranda Interaktif 3D">
+        <span class="nav-tab-icon">🏠</span>
+        <span class="nav-tab-label">Beranda</span>
       </button>
-      <button class="nav-tab" data-view="explore">
-        <span>🔍 Eksplorasi Hardware</span>
-        <span class="tab-badge">8 Part</span>
+      <button class="nav-tab" data-view="explore" title="Eksplorasi Hardware 3D">
+        <span class="nav-tab-icon">🔍</span>
+        <span class="nav-tab-label">Eksplorasi 3D</span>
       </button>
-      <button class="nav-tab" data-view="simulate">
-        <span>🛠️ Simulasi Rakit & PSU</span>
+      <button class="nav-tab" data-view="simulate" title="Simulasi Rakit PC 3D & Kalkulator Daya">
+        <span class="nav-tab-icon">🛠️</span>
+        <span class="nav-tab-label">Simulasi Rakit</span>
       </button>
-      <button class="nav-tab" data-view="lab">
-        <span>🎬 Video & Audio BIOS</span>
+      <button class="nav-tab" data-view="lab" title="Video Praktik & Diagnosa Audio BIOS">
+        <span class="nav-tab-icon">🎬</span>
+        <span class="nav-tab-label">Video & Audio</span>
       </button>
-      <button class="nav-tab" data-view="quiz">
-        <span>🏆 Kuis Evaluasi</span>
-        <span class="tab-badge">10 Soal</span>
+      <button class="nav-tab" data-view="quiz" title="Uji Pemahaman Hardware PC">
+        <span class="nav-tab-icon">🏆</span>
+        <span class="nav-tab-label">Kuis</span>
       </button>
     </nav>
 
-    <div class="nav-actions">
-      <input type="file" id="input-custom-glb" accept=".glb,.gltf" style="display:none;" />
-      <button class="icon-btn" id="btn-download-mobo-glb" title="Unduh Model 3D Motherboard MSI MPG (.glb)">
-        💾 Unduh .GLB
+    <!-- Right: Minimalist Tools & Settings Floating Pill -->
+    <div class="tools-floating-wrap">
+      <button class="tools-floating-pill" id="btn-toggle-tools-menu" title="Menu Alat, Audio, dan Ekspor 3D">
+        <span class="tools-pill-icon">⚙️</span>
+        <span class="tools-pill-text">Alat & Setelan</span>
       </button>
-      <button class="icon-btn" id="btn-upload-glb" title="Muat Model 3D Blender (.glb/.gltf)">
-        📦 Muat .GLB
-      </button>
-      <button class="icon-btn" id="btn-restore-rig" style="display:none;">
-        🔄 Rig Default
-      </button>
-      <button class="icon-btn" id="btn-toggle-bgm">
-        🎵 BGM: OFF
-      </button>
-      <button class="icon-btn active" id="btn-toggle-sfx">
-        🔊 SFX: ON
-      </button>
+
+      <!-- Dropdown Floating Menu -->
+      <div class="tools-dropdown-card" id="tools-dropdown-card">
+        <div class="tools-dropdown-header">
+          <span>ALAT 3D & SETELAN</span>
+        </div>
+        <div class="tools-dropdown-list">
+          <input type="file" id="input-custom-glb" accept=".glb,.gltf" style="display:none;" />
+          <button class="tools-menu-item" id="btn-download-mobo-glb">
+            <span class="menu-item-icon">💾</span>
+            <div class="menu-item-content">
+              <span class="menu-item-title">Unduh Model 3D .GLB</span>
+              <span class="menu-item-desc">Motherboard MSI MPG Z790</span>
+            </div>
+          </button>
+          <button class="tools-menu-item" id="btn-upload-glb">
+            <span class="menu-item-icon">📦</span>
+            <div class="menu-item-content">
+              <span class="menu-item-title">Muat Model 3D Blender</span>
+              <span class="menu-item-desc">Impor file .glb kustom</span>
+            </div>
+          </button>
+          <button class="tools-menu-item" id="btn-restore-rig" style="display:none;">
+            <span class="menu-item-icon">🔄</span>
+            <div class="menu-item-content">
+              <span class="menu-item-title">Kembalikan Rig Default</span>
+              <span class="menu-item-desc">Reset ke rig 3D bawaan</span>
+            </div>
+          </button>
+          <div class="tools-dropdown-divider"></div>
+          <button class="tools-menu-item" id="btn-toggle-bgm">
+            <span class="menu-item-icon">🎵</span>
+            <div class="menu-item-content">
+              <span class="menu-item-title" id="lbl-bgm-title">Musik Latar: OFF</span>
+              <span class="menu-item-desc">Audio ambient santai</span>
+            </div>
+          </button>
+          <button class="tools-menu-item" id="btn-toggle-sfx">
+            <span class="menu-item-icon">🔊</span>
+            <div class="menu-item-content">
+              <span class="menu-item-title" id="lbl-sfx-title">Efek Suara: ON</span>
+              <span class="menu-item-desc">Klik & interaksi tombol</span>
+            </div>
+          </button>
+          <div class="tools-dropdown-divider"></div>
+          <div class="tools-info-footer">
+            <div class="tools-info-title">UTS SISTEM MULTIMEDIA</div>
+            <div class="tools-info-sub">S1 Ilmu Komputer • 3D PC Builder 101</div>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 

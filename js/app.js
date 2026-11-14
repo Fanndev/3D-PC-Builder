@@ -133,21 +133,42 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* --------------------------------------------------------------------------
-     TOP NAVBAR AUDIO & 3D BOTTOM HUD CONTROLS
+     TOP FLOATING TOOLS MENU & AUDIO CONTROLS
      -------------------------------------------------------------------------- */
+  const btnToggleToolsMenu = document.getElementById('btn-toggle-tools-menu');
+  const toolsDropdownCard = document.getElementById('tools-dropdown-card');
+
+  btnToggleToolsMenu?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    audio.playClick();
+    const isOpen = toolsDropdownCard?.classList.toggle('show');
+    btnToggleToolsMenu.classList.toggle('active', isOpen);
+  });
+
+  // Close dropdown on click outside
+  document.addEventListener('click', (e) => {
+    if (toolsDropdownCard && !toolsDropdownCard.contains(e.target) && e.target !== btnToggleToolsMenu) {
+      toolsDropdownCard.classList.remove('show');
+      btnToggleToolsMenu?.classList.remove('active');
+    }
+  });
+
   const btnBgm = document.getElementById('btn-toggle-bgm');
+  const lblBgm = document.getElementById('lbl-bgm-title');
   btnBgm?.addEventListener('click', () => {
     const playing = audio.toggleBgm();
     btnBgm.classList.toggle('active', playing);
-    btnBgm.innerHTML = playing ? '🎵 BGM: ON' : '🎵 BGM: OFF';
+    if (lblBgm) lblBgm.textContent = playing ? 'Musik Latar: ON' : 'Musik Latar: OFF';
     showToast(playing ? 'Musik Latar (Ambient BGM) Diaktifkan' : 'Musik Latar Dimatikan');
   });
 
   const btnSfx = document.getElementById('btn-toggle-sfx');
+  const lblSfx = document.getElementById('lbl-sfx-title');
   btnSfx?.addEventListener('click', () => {
     audio.sfxEnabled = !audio.sfxEnabled;
     btnSfx.classList.toggle('active', audio.sfxEnabled);
-    btnSfx.innerHTML = audio.sfxEnabled ? '🔊 SFX: ON' : '🔇 SFX: OFF';
+    if (lblSfx) lblSfx.textContent = audio.sfxEnabled ? 'Efek Suara: ON' : 'Efek Suara: OFF';
+    showToast(audio.sfxEnabled ? 'Efek Suara (SFX) Aktif' : 'Efek Suara Dimatikan');
   });
 
   // Bottom 3D Viewport Controls
@@ -351,45 +372,71 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
 
-      <div class="vo-audio-bar">
-        <button class="vo-btn" id="btn-part-vo">
-          🔊 Dengarkan Voice-Over
-        </button>
-        <span class="vo-status" id="part-vo-status">Narasi Audio Siap</span>
+      <!-- Segmented Reading Tabs for Clean, Focused Learning -->
+      <div class="inspector-nav-tabs">
+        <button class="insp-tab-btn active" data-tab="reading">📖 Materi & Fungsi</button>
+        <button class="insp-tab-btn" data-tab="specs">⚙️ Spesifikasi & 3D</button>
+        <button class="insp-tab-btn" data-tab="guide">💡 Panduan Pasang</button>
       </div>
 
-      ${isMobo ? `
-        <div class="inspector-actions-row">
-          <button class="btn-inspector-action" id="btn-open-form-factors">
-            📐 Komparasi Form Factor
+      <!-- PANE 1: Reading & Core Concept -->
+      <div class="insp-pane active" id="pane-reading">
+        <div class="vo-audio-bar">
+          <button class="vo-btn" id="btn-part-vo">
+            🔊 Dengarkan Voice-Over
           </button>
-          <button class="btn-inspector-action" id="btn-export-mobo-glb">
-            💾 Unduh Model 3D .GLB
-          </button>
+          <span class="vo-status" id="part-vo-status">Narasi Audio Siap</span>
         </div>
-      ` : ''}
 
-      <div class="detail-section-label">Deskripsi & Fungsi Utama</div>
-      <p class="detail-text">${comp.description}</p>
+        <div class="detail-section-label">📘 Deskripsi & Fungsi Utama</div>
+        <p class="detail-text">${comp.description}</p>
 
-      <div class="detail-section-label">Cara Kerja di Dalam Sistem</div>
-      <p class="detail-text">${comp.howItWorks}</p>
-
-      <div class="detail-section-label">Spesifikasi Teknis (3D Model)</div>
-      <div class="specs-grid">
-        ${comp.specs.map(s => `
-          <div class="spec-chip">
-            <div class="spec-chip-label">${s.label}</div>
-            <div class="spec-chip-val">${s.val}</div>
-          </div>
-        `).join('')}
+        <div class="detail-section-label">⚡ Cara Kerja di Dalam Sistem</div>
+        <p class="detail-text">${comp.howItWorks}</p>
       </div>
 
-      <div class="install-tip-box">
-        <strong>💡 Tips Perakitan & K3:</strong><br/>
-        ${comp.installTip}
+      <!-- PANE 2: Technical Specs & 3D Model -->
+      <div class="insp-pane" id="pane-specs">
+        ${isMobo ? `
+          <div class="inspector-actions-row" style="margin-bottom:14px;">
+            <button class="btn-inspector-action" id="btn-open-form-factors">
+              📐 Komparasi Form Factor
+            </button>
+            <button class="btn-inspector-action" id="btn-export-mobo-glb">
+              💾 Unduh Model 3D .GLB
+            </button>
+          </div>
+        ` : ''}
+
+        <div class="detail-section-label">📊 Spesifikasi Teknis (Model 3D)</div>
+        <div class="specs-grid">
+          ${comp.specs.map(s => `
+            <div class="spec-chip">
+              <div class="spec-chip-label">${s.label}</div>
+              <div class="spec-chip-val">${s.val}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- PANE 3: Assembly & K3 Safety Guide -->
+      <div class="insp-pane" id="pane-guide">
+        <div class="install-tip-box" style="margin-top:0;">
+          <strong style="color:var(--accent-amber);">💡 Tips Perakitan & K3 (Keselamatan Kerja):</strong><br/><br/>
+          ${comp.installTip}
+        </div>
       </div>
     `;
+
+    // Segmented tab switching
+    container.querySelectorAll('.insp-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        audio.playClick();
+        const tab = btn.dataset.tab;
+        container.querySelectorAll('.insp-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+        container.querySelectorAll('.insp-pane').forEach(p => p.classList.toggle('active', p.id === `pane-${tab}`));
+      });
+    });
 
     const voBtn = document.getElementById('btn-part-vo');
     const voStatus = document.getElementById('part-vo-status');
