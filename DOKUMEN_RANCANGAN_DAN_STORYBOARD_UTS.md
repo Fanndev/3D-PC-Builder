@@ -4,6 +4,26 @@
 **Program Studi / Semester:** S1 Ilmu Komputer / Semester VII-A  
 **Fakultas:** Teknik  
 **Dosen Pengampu:** Melati Rosanensi, M.Kom  
+**Bentuk Ujian:** Project-Based Assessment (Kelompok — 10 Mahasiswa)  
+**Link Demo Website:** [https://pcbuilder-opal.vercel.app](https://pcbuilder-opal.vercel.app)  
+**Repositori GitHub:** [https://github.com/Fanndev/3D-PC-Builder](https://github.com/Fanndev/3D-PC-Builder)
+
+---
+
+## DAFTAR ANGGOTA KELOMPOK
+
+| No | Nama Mahasiswa | NIM |
+| :---: | :--- | :--- |
+| 1 | Muh. Farid Hakim | `2301010211` |
+| 2 | Mauulana Habib Al Ansyori | `2301010197` |
+| 3 | Mohamad Irfan fadhlurrahman | `2301010162` |
+| 4 | Mohammad Syahiddin Danuwarsi Abdussamad | `2301010187` |
+| 5 | Arya Ramadhani | `2301010208` |
+| 6 | Nabila Umardi | `2301010165` |
+| 7 | Muhammad Ferris Naufal | `2301010174` |
+| 8 | Muhammad Qodri | `2301010172` |
+| 9 | Mu'taman Abid | `2301010189` |
+| 10 | Reno Kurniawan | `2301010175` |
 
 ---
 

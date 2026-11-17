@@ -117,6 +117,14 @@
             </div>
           </button>
           <div class="tools-dropdown-divider"></div>
+          <button class="tools-menu-item" id="btn-open-team-modal">
+            <span class="menu-item-icon">👥</span>
+            <div class="menu-item-content">
+              <span class="menu-item-title">Anggota Kelompok</span>
+              <span class="menu-item-desc">Tim Penyusun UTS (10 Mhs)</span>
+            </div>
+          </button>
+          <div class="tools-dropdown-divider"></div>
           <div class="tools-info-footer">
             <div class="tools-info-title">UTS SISTEM MULTIMEDIA</div>
             <div class="tools-info-sub">S1 Ilmu Komputer • 3D PC Builder 101</div>
@@ -414,7 +422,32 @@
   </div>
 
   <!-- ========================================================================
-       6. THREE.JS LIBRARIES & APPLICATION SCRIPTS
+       6. MODAL ANGGOTA KELOMPOK UTS SISTEM MULTIMEDIA
+       ======================================================================== -->
+  <div class="modal-backdrop" id="modal-team">
+    <div class="modal-card" style="max-width: 760px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-badge">👥 UTS SISTEM MULTIMEDIA • S1 ILMU KOMPUTER</div>
+          <h2 class="modal-title">Daftar Anggota Kelompok</h2>
+          <p class="modal-subtitle">Dosen Pengampu: Melati Rosanensi, M.Kom • Semester VII / Kelas A</p>
+        </div>
+        <button class="modal-close-btn" id="btn-close-team-modal">✕</button>
+      </div>
+      <div class="modal-body" id="team-members-content"></div>
+      <div class="modal-footer">
+        <span style="font-size:12px; color:var(--text-secondary);">
+          🖥️ Proyek <strong>PC Builder 101 — 3D Interactive Multimedia</strong>
+        </span>
+        <button class="btn-primary" id="btn-team-close-ok" style="padding:8px 18px; font-size:12.5px;">
+          ✓ Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       7. THREE.JS LIBRARIES & APPLICATION SCRIPTS
        ======================================================================== -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>

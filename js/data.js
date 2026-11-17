@@ -653,5 +653,18 @@ window.PC_DATA = {
       answer: 0,
       explanation: 'Slot PCIe x16 paling atas terhubung langsung dengan jalur PCIe dari CPU tanpa perantara chipset tambahan, sehingga memberikan performa grafis paling maksimal.'
     }
+  ],
+
+  teamMembers: [
+    { no: 1, name: 'Muh. Farid Hakim', nim: '2301010211' },
+    { no: 2, name: 'Mauulana Habib Al Ansyori', nim: '2301010197' },
+    { no: 3, name: 'Mohamad Irfan fadhlurrahman', nim: '2301010162' },
+    { no: 4, name: 'Mohammad Syahiddin Danuwarsi Abdussamad', nim: '2301010187' },
+    { no: 5, name: 'Arya Ramadhani', nim: '2301010208' },
+    { no: 6, name: 'Nabila Umardi', nim: '2301010165' },
+    { no: 7, name: 'Muhammad Ferris Naufal', nim: '2301010174' },
+    { no: 8, name: 'Muhammad Qodri', nim: '2301010172' },
+    { no: 9, name: "Mu'taman Abid", nim: '2301010189' },
+    { no: 10, name: 'Reno Kurniawan', nim: '2301010175' }
   ]
 };

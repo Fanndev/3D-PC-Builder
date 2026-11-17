@@ -537,6 +537,47 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.id === 'modal-form-factors') closeFormFactorsModal();
   });
 
+  /* --------------------------------------------------------------------------
+     TEAM MEMBERS MODAL
+     -------------------------------------------------------------------------- */
+  function openTeamModal() {
+    const modal = document.getElementById('modal-team');
+    const content = document.getElementById('team-members-content');
+    if (!modal || !content || !DATA.teamMembers) return;
+
+    content.innerHTML = `
+      <div class="team-grid">
+        ${DATA.teamMembers.map(m => `
+          <div class="team-member-card">
+            <div class="team-num-badge">${String(m.no).padStart(2, '0')}</div>
+            <div class="team-member-info">
+              <div class="team-member-name">${m.name}</div>
+              <div class="team-member-nim">NIM: ${m.nim}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    toolsDropdownCard?.classList.remove('show');
+    btnToggleToolsMenu?.classList.remove('active');
+    modal.classList.add('show');
+  }
+
+  function closeTeamModal() {
+    document.getElementById('modal-team')?.classList.remove('show');
+  }
+
+  document.getElementById('btn-open-team-modal')?.addEventListener('click', () => {
+    audio.playClick();
+    openTeamModal();
+  });
+  document.getElementById('btn-close-team-modal')?.addEventListener('click', closeTeamModal);
+  document.getElementById('btn-team-close-ok')?.addEventListener('click', closeTeamModal);
+  document.getElementById('modal-team')?.addEventListener('click', (e) => {
+    if (e.target.id === 'modal-team') closeTeamModal();
+  });
+
   // Top Nav Download Button
   document.getElementById('btn-download-mobo-glb')?.addEventListener('click', () => {
     audio.playClick();

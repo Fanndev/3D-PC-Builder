@@ -323,9 +323,26 @@ function generateDocxReport(docxPath) {
         ['Program Studi / Fakultas', 'S1 Ilmu Komputer / Fakultas Teknik'],
         ['Semester / Kelas', 'VII / A (Ganjil 2025/2026)'],
         ['Dosen Pengampu', 'Melati Rosanensi, M.Kom'],
-        ['Bentuk Ujian', 'Project-Based Assessment (Kelompok 7 Mahasiswa)'],
+        ['Bentuk Ujian', 'Project-Based Assessment (Kelompok — 10 Mahasiswa)'],
         ['Tema Produk', 'Media Pembelajaran Interaktif (Eksplorasi & Perakitan Hardware PC 3D)'],
+        ['Link Live Website', 'https://pcbuilder-opal.vercel.app'],
         ['Repositori Kode & Produk', 'https://github.com/Fanndev/3D-PC-Builder']
+      ]
+    ),
+    wParagraph('DAFTAR ANGGOTA KELOMPOK', { bold: true, size: 26, color: '0F172A', before: 240, after: 100 }),
+    wTable(
+      ['No', 'Nama Mahasiswa', 'NIM'],
+      [
+        ['1', 'Muh. Farid Hakim', '2301010211'],
+        ['2', 'Mauulana Habib Al Ansyori', '2301010197'],
+        ['3', 'Mohamad Irfan fadhlurrahman', '2301010162'],
+        ['4', 'Mohammad Syahiddin Danuwarsi Abdussamad', '2301010187'],
+        ['5', 'Arya Ramadhani', '2301010208'],
+        ['6', 'Nabila Umardi', '2301010165'],
+        ['7', 'Muhammad Ferris Naufal', '2301010174'],
+        ['8', 'Muhammad Qodri', '2301010172'],
+        ['9', "Mu'taman Abid", '2301010189'],
+        ['10', 'Reno Kurniawan', '2301010175']
       ]
     ),
     wParagraph('BAB 1: ANALISIS KEBUTUHAN PENGGUNA & TUJUAN PRODUK', { bold: true, size: 26, color: '0F172A', before: 280, after: 100 }),
@@ -397,11 +414,20 @@ function generateDocxReport(docxPath) {
 
   if (fs.existsSync(docxPath)) fs.unlinkSync(docxPath);
 
-  execFileSync('powershell.exe', [
-    '-NoProfile',
-    '-Command',
-    `Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory('${tmpDocxDir.replace(/'/g, "''")}', '${docxPath.replace(/'/g, "''")}')`
-  ], { stdio: 'ignore' });
+  // Build valid OPC-compliant ZIP archive with forward slashes ('/')
+  const psScript = [
+    'Add-Type -AssemblyName System.IO.Compression',
+    'Add-Type -AssemblyName System.IO.Compression.FileSystem',
+    `$zip = [System.IO.Compression.ZipFile]::Open('${docxPath.replace(/'/g, "''")}', [System.IO.Compression.ZipArchiveMode]::Create)`,
+    `$files = @('[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml')`,
+    'foreach ($rel in $files) {',
+    `  $src = Join-Path '${tmpDocxDir.replace(/'/g, "''")}' ($rel -replace '/', '\\')`,
+    '  [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $src, $rel, [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null',
+    '}',
+    '$zip.Dispose()'
+  ].join('; ');
+
+  execFileSync('powershell.exe', ['-NoProfile', '-Command', psScript], { stdio: 'ignore' });
 
   fs.rmSync(tmpDocxDir, { recursive: true, force: true });
   console.log(`[OK] Generated Word Report (.docx): ${path.basename(docxPath)} (${(fs.statSync(docxPath).size / 1024).toFixed(1)} KB)`);
