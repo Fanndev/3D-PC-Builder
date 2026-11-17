@@ -347,9 +347,28 @@ class MultimediaAudioEngine {
 
   startBgm() {
     this.bgmPlaying = true;
-    const now = this.ctx.currentTime;
 
-    // Gentle futuristic ambient pad chord (C#m9 / Asus2 warm cyber drone)
+    // Prefer real ambient electronic MP3 track in assets/audio/bgm_ambient.mp3
+    try {
+      if (!this.bgmAudioEl) {
+        this.bgmAudioEl = new Audio('assets/audio/bgm_ambient.mp3');
+        this.bgmAudioEl.loop = true;
+        this.bgmAudioEl.volume = 0.36;
+      }
+      const playPromise = this.bgmAudioEl.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {
+          this.startProceduralBgm();
+        });
+      }
+      return;
+    } catch (e) {
+      this.startProceduralBgm();
+    }
+  }
+
+  startProceduralBgm() {
+    const now = this.ctx.currentTime;
     const freqs = [110.0, 164.81, 220.0, 277.18, 329.63];
     this.bgmNodes = freqs.map((f, idx) => {
       const osc = this.ctx.createOscillator();
@@ -380,6 +399,9 @@ class MultimediaAudioEngine {
 
   stopBgm() {
     this.bgmPlaying = false;
+    if (this.bgmAudioEl) {
+      this.bgmAudioEl.pause();
+    }
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
     this.bgmNodes.forEach(node => {

@@ -312,24 +312,27 @@
       <div class="glass-panel">
         <div class="panel-header">
           <div class="panel-title">🎬 Modul Video Tutorial Perakitan PC</div>
-          <div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
             <input type="file" id="input-custom-video" accept="video/mp4,video/webm" style="display:none;" />
-            <button class="icon-btn" id="btn-load-mp4">📂 Muat File .MP4 Kelompok</button>
+            <button class="icon-btn active" id="btn-mode-mp4" title="Tampilkan Video Praktik MP4">🎞️ Video MP4</button>
+            <button class="icon-btn" id="btn-mode-canvas" title="Tampilkan Simulasi Animasi 2D">🎨 Simulasi 2D</button>
+            <button class="icon-btn" id="btn-load-mp4" title="Muat File Video Kustom dari Komputer">📂 Muat .MP4</button>
           </div>
         </div>
         <div class="panel-body">
           <div class="video-stage-wrap">
-            <canvas id="tutorial-video-canvas" width="640" height="360"></canvas>
-            <video id="custom-video-player" controls style="display:none;"></video>
+            <video id="custom-video-player" src="assets/video/bab1_cpu_mobo.mp4?v=2" controls preload="metadata" style="display:block;"></video>
+            <canvas id="tutorial-video-canvas" width="640" height="360" style="display:none;"></canvas>
           </div>
 
           <div class="video-controls-bar">
-            <div style="display:flex; gap:8px;">
-              <button class="icon-btn active" id="btn-video-play">⏸️ Pause Animasi Video</button>
-              <button class="icon-btn" id="btn-video-narrate">🔊 Narasi Bab Ini</button>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="icon-btn active" id="btn-video-play">▶️ Putar Video Bab</button>
+              <button class="icon-btn" id="btn-play-full-video">🎬 Putar Full Video (4 Bab)</button>
+              <button class="icon-btn" id="btn-video-narrate">🔊 Narasi Audio Bab</button>
             </div>
-            <span style="font-size:11px; color:var(--text-secondary); font-family:var(--font-mono);">
-              4 Bab Materi Perakitan
+            <span id="video-mode-badge" style="font-size:11px; color:var(--accent-cyan); font-family:var(--font-mono);">
+              HD MP4 • Narasi Indonesia
             </span>
           </div>
 

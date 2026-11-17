@@ -309,6 +309,7 @@ window.PC_DATA = {
     {
       step: 1,
       partId: 'mobo',
+      audioFile: 'assets/audio/vo_step1.mp3',
       title: 'Pasang Motherboard MSI MPG ke Casing',
       instruction: 'Pasang I/O shield, sejajarkan 9 lubang standoff baut ATX di dalam Casing, letakkan Motherboard MSI MPG Z790, lalu kencangkan baut pengunci.',
       successMsg: 'Motherboard MSI MPG Z790 CARBON WIFI terpasang kokoh di atas baut standoff Casing!'
@@ -316,6 +317,7 @@ window.PC_DATA = {
     {
       step: 2,
       partId: 'cpu',
+      audioFile: 'assets/audio/vo_step2.mp3',
       title: 'Pasang Processor (CPU) ke Socket',
       instruction: 'Buka tuas Socket CPU, sejajarkan tanda segitiga emas Processor, lalu kunci kembali.',
       successMsg: 'Processor berhasil duduk sempurna di Socket CPU!'
@@ -323,6 +325,7 @@ window.PC_DATA = {
     {
       step: 3,
       partId: 'ssd',
+      audioFile: 'assets/audio/vo_step3.mp3',
       title: 'Pasang Storage SSD NVMe M.2',
       instruction: 'Masukkan SSD NVMe ke slot M.2 di permukaan Motherboard sebelum tertutup komponen besar.',
       successMsg: 'SSD NVMe M.2 terpasang di jalur PCIe 4.0!'
@@ -330,6 +333,7 @@ window.PC_DATA = {
     {
       step: 4,
       partId: 'ram',
+      audioFile: 'assets/audio/vo_step4.mp3',
       title: 'Pasang 2 Keping RAM DDR5 (Dual-Channel)',
       instruction: 'Tekan kedua keping RAM DDR5 ke slot A2 & B2 hingga pengait mengunci otomatis.',
       successMsg: 'Memori RAM 32GB Dual-Channel terkunci dengan bunyi klik!'
@@ -337,6 +341,7 @@ window.PC_DATA = {
     {
       step: 5,
       partId: 'cooler',
+      audioFile: 'assets/audio/vo_step5.mp3',
       title: 'Oles Thermal Paste & Pasang CPU Cooler',
       instruction: 'Pasang CPU Cooler ARGB di atas Processor dan hubungkan kabel kipas ke CPU_FAN.',
       successMsg: 'CPU Cooler terpasang! Suhu prosesor kini terjaga aman.'
@@ -344,6 +349,7 @@ window.PC_DATA = {
     {
       step: 6,
       partId: 'gpu',
+      audioFile: 'assets/audio/vo_step6.mp3',
       title: 'Pasang Kartu Grafis (GPU RTX)',
       instruction: 'Tancapkan GPU ke slot PCIe x16 utama hingga mengunci pada bracket belakang.',
       successMsg: 'Kartu Grafis RTX terpasang gagah di slot PCIe x16!'
@@ -351,6 +357,7 @@ window.PC_DATA = {
     {
       step: 7,
       partId: 'psu',
+      audioFile: 'assets/audio/vo_step7.mp3',
       title: 'Pasang Power Supply (PSU) & Kabel Daya',
       instruction: 'Pasang PSU 750W di ruang bawah casing dan hubungkan kabel 24-pin, CPU 8-pin & PCIe.',
       successMsg: 'Seluruh komponen telah terpasang! Klik "NYALAKAN PC (POWER ON)" untuk uji coba.'
@@ -475,29 +482,39 @@ window.PC_DATA = {
     }
   ],
 
+  fullTutorialVideo: 'assets/video/tutorial_rakit_pc.mp4?v=2',
+
   videoChapters: [
     {
       id: 0,
       title: 'Bab 1: Persiapan & Pemasangan CPU ke Socket',
-      duration: '00:00 - 00:45',
-      summary: 'Cara membuka pengait socket motherboard, menyamakan tanda segitiga emas pada sudut CPU, dan mengunci prosesor tanpa merusak pin.'
+      duration: '00:00 - 00:34',
+      videoFile: 'assets/video/bab1_cpu_mobo.mp4?v=2',
+      audioFile: 'assets/audio/vo_chap1.mp3?v=2',
+      summary: 'Cara membuka pengait socket motherboard LGA 1700, menyamakan tanda segitiga emas pada sudut CPU, dan mengunci prosesor tanpa merusak pin.'
     },
     {
       id: 1,
       title: 'Bab 2: Teknik Mengoles Thermal Paste & CPU Cooler',
-      duration: '00:45 - 01:30',
+      duration: '00:34 - 01:27',
+      videoFile: 'assets/video/bab2_cooler_thermal.mp4?v=2',
+      audioFile: 'assets/audio/vo_chap2.mp3?v=2',
       summary: 'Takaran ideal thermal paste (metode titik kacang polong), melepas stiker pelindung heatsink, dan menghubungkan kabel 4-pin ke CPU_FAN.'
     },
     {
-      id: 3,
+      id: 2,
       title: 'Bab 3: Pemasangan RAM Dual-Channel & SSD NVMe',
-      duration: '01:30 - 02:15',
+      duration: '01:27 - 02:05',
+      videoFile: 'assets/video/bab3_ram_ssd.mp4?v=2',
+      audioFile: 'assets/audio/vo_chap3.mp3?v=2',
       summary: 'Memilih slot RAM A2 & B2 untuk mengaktifkan bandwidth Dual-Channel serta memasang SSD M.2 dengan sudut 30 derajat.'
     },
     {
-      id: 4,
+      id: 3,
       title: 'Bab 4: Instalasi GPU RTX, Manajemen Kabel PSU & First Boot',
-      duration: '02:15 - 03:00',
+      duration: '02:05 - 03:21',
+      videoFile: 'assets/video/bab4_gpu_psu_boot.mp4?v=2',
+      audioFile: 'assets/audio/vo_chap4.mp3?v=2',
       summary: 'Memasang kartu grafis di slot PCIe x16, menyambungkan kabel 24-pin ATX, 8-pin EPS, dan PCIe Power, hingga pengujian nyala pertama (POST).'
     }
   ],
