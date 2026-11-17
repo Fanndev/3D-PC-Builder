@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
      -------------------------------------------------------------------------- */
   function switchView(viewId, updateCamera = true) {
     audio.stopVoiceOver();
+    if (viewId !== 'lab') {
+      const vid = document.getElementById('custom-video-player');
+      if (vid && !vid.paused) vid.pause();
+    }
     currentView = viewId;
 
     document.querySelectorAll('.nav-tab').forEach(btn => {
@@ -601,7 +605,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const idx = parseInt(btn.dataset.stepIdx, 10);
         const s = DATA.assemblySteps[idx];
         audio.playClick();
-        audio.speakWithBrowserTTS(`Langkah ${s.step}. ${s.title}. ${s.instruction}`);
+        audio.playVoiceOver(
+          `Langkah ${s.step}. ${s.title}. ${s.instruction}`,
+          s.audioFile || `assets/audio/vo_step${s.step}.mp3`
+        );
         showToast(`🔊 Memutar instruksi Langkah ${s.step}...`);
       });
     });
@@ -768,8 +775,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('tutorial-video-canvas');
     const mp4Video = document.getElementById('custom-video-player');
     const btnPlayPause = document.getElementById('btn-video-play');
+    const btnPlayFull = document.getElementById('btn-play-full-video');
     const btnNarrateChap = document.getElementById('btn-video-narrate');
+    const btnModeMp4 = document.getElementById('btn-mode-mp4');
+    const btnModeCanvas = document.getElementById('btn-mode-canvas');
+    const modeBadge = document.getElementById('video-mode-badge');
     const fileInput = document.getElementById('input-custom-video');
+
+    let isMp4Mode = true;
+
+    function setVideoDisplayMode(useMp4) {
+      isMp4Mode = useMp4;
+      btnModeMp4?.classList.toggle('active', useMp4);
+      btnModeCanvas?.classList.toggle('active', !useMp4);
+      if (useMp4) {
+        if (canvas) canvas.style.display = 'none';
+        if (mp4Video) mp4Video.style.display = 'block';
+        if (modeBadge) modeBadge.textContent = 'HD MP4 • Narasi Indonesia';
+        if (btnPlayPause) {
+          btnPlayPause.textContent = (mp4Video && !mp4Video.paused) ? '⏸️ Pause Video' : '▶️ Putar Video Bab';
+        }
+      } else {
+        if (mp4Video) {
+          mp4Video.pause();
+          mp4Video.style.display = 'none';
+        }
+        if (canvas) canvas.style.display = 'block';
+        if (modeBadge) modeBadge.textContent = 'Simulasi Animasi 2D Interaktif';
+        if (btnPlayPause) {
+          btnPlayPause.textContent = isSimVideoPlaying ? '⏸️ Pause Animasi 2D' : '▶️ Putar Animasi 2D';
+        }
+      }
+    }
+
+    btnModeMp4?.addEventListener('click', () => {
+      audio.playClick();
+      setVideoDisplayMode(true);
+    });
+
+    btnModeCanvas?.addEventListener('click', () => {
+      audio.playClick();
+      setVideoDisplayMode(false);
+    });
+
+    if (mp4Video) {
+      mp4Video.addEventListener('play', () => {
+        if (isMp4Mode && btnPlayPause) btnPlayPause.textContent = '⏸️ Pause Video';
+      });
+      mp4Video.addEventListener('pause', () => {
+        if (isMp4Mode && btnPlayPause) btnPlayPause.textContent = '▶️ Putar Video Bab';
+      });
+    }
 
     if (chapContainer) {
       chapContainer.innerHTML = DATA.videoChapters.map((c, idx) => `
@@ -786,6 +842,15 @@ document.addEventListener('DOMContentLoaded', () => {
           chapContainer.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           updateChapterSummary();
+
+          const chap = DATA.videoChapters[activeVideoChapter];
+          if (chap && chap.videoFile && mp4Video) {
+            mp4Video.src = chap.videoFile;
+            if (isMp4Mode) {
+              mp4Video.play().catch(() => {});
+              showToast(`🎬 Memutar Video: ${chap.title}`);
+            }
+          }
         });
       });
     }
@@ -801,24 +866,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnPlayPause?.addEventListener('click', () => {
       audio.playClick();
-      if (mp4Video && mp4Video.style.display !== 'none') {
+      if (isMp4Mode && mp4Video) {
         if (mp4Video.paused) {
-          mp4Video.play();
+          mp4Video.play().catch(() => {});
           btnPlayPause.textContent = '⏸️ Pause Video';
         } else {
           mp4Video.pause();
-          btnPlayPause.textContent = '▶️ Putar Video';
+          btnPlayPause.textContent = '▶️ Putar Video Bab';
         }
       } else {
         isSimVideoPlaying = !isSimVideoPlaying;
-        btnPlayPause.textContent = isSimVideoPlaying ? '⏸️ Pause Animasi Video' : '▶️ Putar Animasi Video';
+        btnPlayPause.textContent = isSimVideoPlaying ? '⏸️ Pause Animasi 2D' : '▶️ Putar Animasi 2D';
+      }
+    });
+
+    btnPlayFull?.addEventListener('click', () => {
+      audio.playClick();
+      setVideoDisplayMode(true);
+      if (mp4Video && DATA.fullTutorialVideo) {
+        mp4Video.src = DATA.fullTutorialVideo;
+        mp4Video.play().catch(() => {});
+        showToast('🎬 Memutar Video Tutorial Perakitan PC Lengkap (Bab 1 - Bab 4)');
       }
     });
 
     btnNarrateChap?.addEventListener('click', () => {
       const chap = DATA.videoChapters[activeVideoChapter] || DATA.videoChapters[0];
-      audio.playVoiceOver(`${chap.title}. ${chap.summary}`, null, (speaking) => {
-        btnNarrateChap.textContent = speaking ? '⏹️ Stop Suara' : '🔊 Narasi Bab Ini';
+      if (mp4Video && !mp4Video.paused) mp4Video.pause();
+      audio.playVoiceOver(`${chap.title}. ${chap.summary}`, chap.audioFile, (speaking) => {
+        btnNarrateChap.textContent = speaking ? '⏹️ Stop Suara' : '🔊 Narasi Audio Bab';
       });
     });
 
@@ -828,12 +904,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fileInput?.addEventListener('change', (e) => {
       const file = e.target.files[0];
-      if (!file || !mp4Video || !canvas) return;
+      if (!file || !mp4Video) return;
       const url = URL.createObjectURL(file);
-      canvas.style.display = 'none';
-      mp4Video.style.display = 'block';
+      setVideoDisplayMode(true);
       mp4Video.src = url;
-      mp4Video.play();
+      mp4Video.play().catch(() => {});
       showToast(`Video "${file.name}" berhasil dimuat ke pemutar!`);
     });
 
