@@ -2,7 +2,7 @@
 
 > **Proyek Ujian Tengah Semester (UTS) Sistem Multimedia**  
 > Program Studi S1 Ilmu Komputer — Fakultas Teknik  
-> 🌐 **Live Demo:** [https://pcbuilder-opal.vercel.app](https://pcbuilder-opal.vercel.app)
+> 🌐 **Live Demo:** [https://pcbuilder-opal.vercel.app](https://3dpcbuilder.vercel.app/)
 
 Aplikasi web interaktif 3D modern untuk edukasi pengenalan dan simulasi perakitan perangkat keras komputer (*hardware* PC) yang mengintegrasikan **5 komponen multimedia**: **Teks, Gambar/Grafis 3D, Audio (Voice-Over & BIOS Beep), Video Praktik, dan Animasi Interaktif**.
 
