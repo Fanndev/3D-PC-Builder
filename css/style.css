@@ -1817,7 +1817,7 @@ html, body {
 }
 
 /* ==========================================================================
-   RESPONSIVE ADJUSTMENTS — COMPREHENSIVE MOBILE-FIRST OVERRIDES
+   RESPONSIVE ADJUSTMENTS — MOBILE-OPTIMIZED BOTTOM NAV APPROACH
    ========================================================================== */
 
 /* ── Tablet & Small Laptop (≤1100px) ── */
@@ -1854,9 +1854,17 @@ html, body {
     left: 12px;
     right: 12px;
   }
+  .home-hero-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+  .quiz-container-panel {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
-/* ── Hide brand text on narrower screens (≤900px) ── */
+/* ── Hide brand text (≤900px) ── */
 @media (max-width: 900px) {
   .brand-floating-pill .brand-name-wrap {
     display: none;
@@ -1864,87 +1872,130 @@ html, body {
   .brand-floating-pill {
     padding: 6px;
   }
-  .home-hero-panel {
-    width: 100%;
-    max-width: 100%;
-  }
   .hero-heading {
     font-size: 26px;
   }
   .hero-desc {
     font-size: 12.5px;
   }
-  .quiz-container-panel {
-    width: 100%;
-    max-width: 100%;
-  }
   .modal-card {
     max-width: 95vw;
   }
 }
 
-/* ── Tablet portrait & large phone (≤768px) ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE LAYOUT (≤768px) — NAV MOVES TO BOTTOM, TOP = BRAND + SETTINGS
+   ══════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+
+  /* ── TOP HEADER: brand left, settings right only ── */
   .top-floating-header {
     top: 8px;
     left: 8px;
     right: 8px;
-    height: auto;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 8px;
   }
+
+  /* ── NAVIGATION → BOTTOM TAB BAR ── */
   .nav-floating-pill {
-    padding: 4px;
-    gap: 2px;
-    order: 3;
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    z-index: 100;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 0;
+    padding: 4px 2px;
+    padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid rgba(0, 240, 255, 0.22);
+    background: rgba(6, 10, 22, 0.95);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
   }
-  .brand-floating-pill {
-    order: 1;
-  }
-  .tools-floating-wrap {
-    order: 2;
-  }
+
   .nav-tab {
-    padding: 6px 10px;
-    font-size: 11.5px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 6px 4px;
+    border-radius: 10px;
+    font-size: 10px;
+    min-width: 0;
   }
-  .nav-tab-label {
-    display: none;
-  }
+
   .nav-tab-icon {
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 1;
   }
+
+  .nav-tab-label {
+    display: block !important;
+    font-size: 9px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 64px;
+    text-align: center;
+  }
+
+  .nav-tab.active {
+    box-shadow: none;
+    background: rgba(0, 240, 255, 0.15);
+  }
+
+  /* ── TOOLS PILL: icon only ── */
   .tools-floating-pill .tools-pill-text {
     display: none;
   }
   .tools-floating-pill {
     padding: 7px 10px;
   }
-
-  /* Adjust view sections for wrapped nav */
-  .view-section {
-    top: 110px;
-    left: 8px;
-    right: 8px;
-    bottom: 14px;
+  .tools-dropdown-card {
+    width: calc(100vw - 20px);
+    right: -4px;
+    border-radius: 14px;
   }
 
-  /* Bottom HUD — scroll horizontally on small screens */
+  /* ── VIEW SECTIONS ── */
+  .view-section {
+    top: 60px;
+    left: 6px;
+    right: 6px;
+    bottom: 62px;  /* above bottom nav */
+  }
+
+  /* ── BOTTOM 3D HUD → compact icon strip above nav bar ── */
   .viewport-hud-bottom {
-    bottom: 10px;
-    left: 8px;
-    right: 8px;
+    bottom: 54px;
+    left: 0;
+    right: 0;
     transform: none;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    padding: 4px 12px;
+    gap: 4px;
     overflow-x: auto;
     overflow-y: hidden;
     justify-content: flex-start;
-    gap: 6px;
-    padding: 6px 10px;
-    border-radius: 16px;
+    background: rgba(6, 10, 22, 0.92);
+    backdrop-filter: blur(14px);
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
@@ -1952,122 +2003,226 @@ html, body {
     display: none;
   }
   .hud-btn {
-    padding: 6px 10px;
+    padding: 5px 9px;
     font-size: 11px;
+    flex-shrink: 0;
+    gap: 3px;
+  }
+  .hud-btn span:not(.rgb-swatch) {
+    display: none;
+  }
+  .hud-divider {
+    margin: 0 2px;
+    height: 18px;
     flex-shrink: 0;
   }
 
-  /* Camera hint */
+  /* ── CAMERA HINT ── */
   .camera-hint {
-    bottom: 60px;
-    left: 8px;
-    right: 8px;
-    transform: none;
-    text-align: center;
-    font-size: 10px;
-    padding: 4px 10px;
+    display: none !important;
   }
 
-  /* Hero panel adjustments */
+  /* ── HERO PANEL ── */
   .home-hero-panel {
-    padding: 20px;
+    padding: 16px;
     width: 100%;
+    max-width: 100%;
     align-self: flex-start;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+  }
+  .hero-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+    margin-bottom: 10px;
   }
   .hero-heading {
-    font-size: 22px;
+    font-size: 21px;
+    margin-bottom: 8px;
   }
   .hero-desc {
     font-size: 12px;
-    line-height: 1.55;
-    margin-bottom: 14px;
+    line-height: 1.5;
+    margin-bottom: 12px;
   }
   .hero-cta-group {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+  #btn-welcome-vo {
+    font-size: 11px;
+    padding: 8px 12px;
+    margin-bottom: 10px !important;
   }
   .multimedia-pills {
     gap: 4px;
+    margin-bottom: 12px;
   }
   .mm-pill {
-    font-size: 10px;
-    padding: 3px 8px;
+    font-size: 9.5px;
+    padding: 3px 7px;
   }
   .quick-stats-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
+    padding-top: 10px;
   }
   .stat-num {
     font-size: 14px;
   }
   .stat-label {
-    font-size: 10px;
+    font-size: 9.5px;
   }
 
-  /* Panels — full-width stacking with scrollable content */
-  .parts-list-panel,
-  .part-detail-panel,
+  /* ── VIEW 2: EKSPLORASI 3D (MOBILE OPTIMIZED CHIPS & BOTTOM SHEET) ── */
+  .explore-layout {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    gap: 8px;
+    pointer-events: none;
+  }
+
+  .parts-list-panel {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    background: rgba(10, 16, 31, 0.88);
+    border-radius: 12px;
+    padding: 0;
+    pointer-events: auto;
+    flex-shrink: 0;
+  }
+  .parts-list-panel .panel-header {
+    display: none;
+  }
+  .parts-list-panel .panel-body {
+    padding: 6px 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .parts-list-panel .panel-body::-webkit-scrollbar {
+    display: none;
+  }
+  .parts-list-panel #parts-list-container {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .parts-list-panel .part-item {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+    padding: 4px 8px;
+    gap: 6px;
+    border-radius: 8px;
+  }
+  .parts-list-panel .part-icon-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  .parts-list-panel .part-item-name {
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .parts-list-panel .part-item-sub {
+    display: none;
+  }
+
+  .part-detail-panel {
+    width: 100% !important;
+    max-height: 42vh !important;
+    pointer-events: auto;
+    border-radius: 16px 16px 12px 12px;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  /* ── VIEW 3: SIMULASI RAKIT ── */
+  .sim-layout {
+    flex-direction: column;
+    overflow-y: auto;
+    height: 100%;
+    gap: 12px;
+    pointer-events: auto;
+  }
   .sim-steps-panel,
   .psu-calc-panel {
-    max-height: 42vh;
+    width: 100% !important;
+    max-height: 44vh;
+    flex-shrink: 0;
   }
   .panel-header {
-    padding: 12px 14px 10px;
+    padding: 10px 12px 8px;
     flex-wrap: wrap;
     gap: 6px;
   }
   .panel-title {
-    font-size: 14px;
+    font-size: 13px;
   }
   .panel-body {
-    padding: 12px 14px;
+    padding: 10px 12px;
   }
 
-  /* PSU Calculator presets grid */
+  /* ── PSU Calculator ── */
   .psu-calc-panel .icon-btn {
-    font-size: 11px;
-    padding: 6px 8px;
+    font-size: 10.5px;
+    padding: 5px 7px;
   }
   .watt-value {
-    font-size: 26px;
+    font-size: 24px;
+  }
+  .psu-recommend-badge {
+    font-size: 10.5px;
+    padding: 4px 10px;
   }
 
-  /* Video controls */
+  /* ── VIDEO & AUDIO ── */
   .video-controls-bar {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
     padding: 8px 10px;
   }
-
-  /* Chapter grid */
   .chapter-grid {
     grid-template-columns: 1fr;
   }
+  .video-stage-wrap {
+    border-radius: 10px;
+  }
 
-  /* Beep cards */
+  /* ── BEEP CARDS ── */
   .beep-card {
     flex-wrap: wrap;
     gap: 8px;
-    padding: 10px 12px;
+    padding: 10px;
   }
 
-  /* Modal adjustments */
+  /* ── MODALS ── */
   .modal-backdrop {
-    padding: 10px;
+    padding: 8px;
+    align-items: flex-end;
   }
   .modal-card {
     max-width: 100%;
-    max-height: 92vh;
-    border-radius: 16px;
+    max-height: 90vh;
+    border-radius: 16px 16px 0 0;
   }
   .modal-header {
     padding: 14px 16px;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
   }
   .modal-title {
-    font-size: 17px;
+    font-size: 16px;
   }
   .modal-subtitle {
     font-size: 11px;
@@ -2077,6 +2232,7 @@ html, body {
   }
   .modal-footer {
     padding: 10px 16px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
     flex-direction: column;
     gap: 8px;
     text-align: center;
@@ -2088,24 +2244,22 @@ html, body {
     grid-template-columns: 1fr;
   }
 
-  /* Toast */
+  /* ── TOAST ── */
   #toast-notification {
-    top: auto;
-    bottom: 72px;
-    left: 50%;
+    top: 60px;
+    bottom: auto;
     max-width: 90vw;
-    font-size: 11.5px;
-    padding: 8px 14px;
+    font-size: 11px;
+    padding: 7px 12px;
   }
 
-  /* Assembly step cards */
+  /* ── ASSEMBLY STEPS ── */
   .assembly-step-card {
-    padding: 9px 10px;
+    padding: 8px 10px;
     gap: 8px;
-    flex-wrap: wrap;
   }
 
-  /* Inspector tabs scroll */
+  /* ── INSPECTOR ── */
   .inspector-nav-tabs {
     overflow-x: auto;
     scrollbar-width: none;
@@ -2119,195 +2273,81 @@ html, body {
     padding: 7px 10px;
     font-size: 11px;
   }
-
-  /* Detail visual card */
   .detail-visual-card {
     flex-direction: column;
     text-align: center;
     gap: 10px;
-    padding: 14px;
+    padding: 12px;
   }
-
-  /* Specs grid */
+  .detail-title {
+    font-size: 16px;
+  }
+  .detail-text {
+    font-size: 13px;
+    line-height: 1.55;
+  }
   .specs-grid {
     grid-template-columns: 1fr;
   }
+  .vo-audio-bar {
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+  .vo-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .inspector-actions-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 
-  /* Quiz */
+  /* ── QUIZ ── */
   .quiz-container-panel {
     max-width: 100%;
   }
+  .quiz-question-box {
+    padding: 14px;
+    border-radius: 12px;
+  }
   .quiz-q-text {
-    font-size: 15px;
+    font-size: 14px;
   }
   .quiz-opt-btn {
-    padding: 12px 14px;
-    font-size: 12.5px;
+    padding: 11px 12px;
+    font-size: 12px;
   }
   .quiz-header-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
   }
-
-  /* Trigger pills */
-  .panel-trigger-pill {
-    top: 118px;
-    font-size: 10.5px;
-    padding: 6px 10px;
-  }
-  .panel-trigger-pill.left-trigger {
-    left: 10px;
-  }
-  .panel-trigger-pill.right-trigger {
-    right: 10px;
-  }
-}
-
-/* ── Small phone (≤480px) ── */
-@media (max-width: 480px) {
-  .top-floating-header {
-    top: 6px;
-    left: 6px;
-    right: 6px;
-  }
-  .nav-floating-pill {
-    gap: 1px;
-    padding: 3px;
-  }
-  .nav-tab {
-    padding: 6px 8px;
-  }
-  .nav-tab-icon {
-    font-size: 15px;
-  }
-
-  .view-section {
-    top: 105px;
-    left: 6px;
-    right: 6px;
-    bottom: 10px;
-  }
-
-  .home-hero-panel {
-    padding: 16px;
-  }
-  .hero-badge {
-    font-size: 9.5px;
-    padding: 4px 10px;
-    margin-bottom: 10px;
-  }
-  .hero-heading {
-    font-size: 19px;
-    margin-bottom: 8px;
-  }
-  .hero-desc {
-    font-size: 11.5px;
-    margin-bottom: 12px;
-  }
-  .hero-cta-group {
-    margin-bottom: 12px;
-  }
-  .btn-primary,
-  .btn-secondary {
-    padding: 10px 14px;
+  .quiz-feedback-box {
+    padding: 10px 12px;
     font-size: 12px;
   }
-  #btn-welcome-vo {
-    font-size: 11.5px;
-    padding: 10px 12px;
-  }
-  .quick-stats-grid {
-    gap: 4px;
-  }
-  .stat-box {
-    padding: 8px 6px;
-  }
-  .stat-num {
-    font-size: 13px;
-  }
-  .stat-label {
-    font-size: 9px;
-  }
 
-  /* Panels */
-  .parts-list-panel,
-  .part-detail-panel,
-  .sim-steps-panel,
-  .psu-calc-panel {
-    max-height: 38vh;
-  }
-  .panel-header {
-    padding: 10px 12px 8px;
-  }
-  .panel-title {
-    font-size: 13px;
-    gap: 5px;
-  }
-  .panel-body {
-    padding: 10px 12px;
-  }
-
-  /* Bottom HUD */
-  .viewport-hud-bottom {
-    bottom: 6px;
-    left: 6px;
-    right: 6px;
-    padding: 5px 8px;
-    gap: 4px;
-  }
-  .hud-btn {
-    padding: 5px 8px;
-    font-size: 10px;
-    gap: 4px;
-  }
-  .hud-btn span:not(.rgb-swatch) {
-    display: none;
-  }
-  .hud-divider {
-    margin: 0 2px;
-    height: 18px;
-  }
-
-  .camera-hint {
-    display: none;
-  }
-
-  /* Watt meter */
-  .watt-value {
-    font-size: 22px;
-  }
-  .psu-recommend-badge {
+  /* ── TRIGGER PILLS ── */
+  .panel-trigger-pill {
+    top: 68px;
     font-size: 10.5px;
-    padding: 4px 10px;
+    padding: 5px 10px;
+  }
+  .panel-trigger-pill.left-trigger {
+    left: 8px;
+  }
+  .panel-trigger-pill.right-trigger {
+    right: 8px;
   }
 
-  /* Video stage */
-  .video-stage-wrap {
-    border-radius: 10px;
+  /* ── ICON BUTTONS ── */
+  .icon-btn {
+    font-size: 11px;
+    padding: 5px 8px;
   }
 
-  /* Modal */
-  .modal-card {
-    border-radius: 14px;
-  }
-  .modal-header {
-    padding: 12px 14px;
-  }
-  .modal-title {
-    font-size: 15px;
-  }
-  .modal-body {
-    padding: 12px 14px;
-  }
-  .ff-card {
-    padding: 12px 10px;
-  }
-  .ff-title {
-    font-size: 13px;
-  }
-
-  /* Team members */
+  /* ── TEAM MEMBERS ── */
   .team-member-card {
     padding: 10px 12px;
     gap: 10px;
@@ -2318,118 +2358,187 @@ html, body {
   .team-member-nim {
     font-size: 10px;
   }
-
-  /* Quiz */
-  .quiz-question-box {
-    padding: 14px;
-    border-radius: 12px;
-  }
-  .quiz-q-text {
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-  .quiz-opt-btn {
-    padding: 10px 12px;
-    font-size: 12px;
-  }
-  .quiz-feedback-box {
-    padding: 10px 12px;
-    font-size: 12px;
-  }
-
-  /* Tools dropdown */
-  .tools-dropdown-card {
-    width: calc(100vw - 24px);
-    right: -6px;
-    border-radius: 14px;
-  }
-
-  /* Detail text */
-  .detail-text {
-    font-size: 13px;
-    line-height: 1.6;
-  }
-  .detail-title {
-    font-size: 16px;
-  }
-
-  /* VO audio bar */
-  .vo-audio-bar {
-    flex-direction: column;
-    gap: 6px;
-    padding: 8px 10px;
-  }
-  .vo-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  /* Inspector actions */
-  .inspector-actions-row {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-
-  /* Icon btn */
-  .icon-btn {
-    font-size: 11px;
-    padding: 5px 8px;
-  }
 }
 
-/* ── Very small phone (≤360px) ── */
-@media (max-width: 360px) {
-  .hero-heading {
-    font-size: 17px;
-  }
-  .hero-desc {
-    font-size: 11px;
-  }
-  .nav-tab {
-    padding: 5px 7px;
-  }
-  .nav-tab-icon {
-    font-size: 14px;
-  }
-  .multimedia-pills {
-    display: none;
-  }
-  .view-section {
-    top: 100px;
-  }
-}
-
-/* ── Landscape phone override ── */
-@media (max-height: 500px) and (orientation: landscape) {
+/* ── Small phone (≤480px) ── */
+@media (max-width: 480px) {
   .top-floating-header {
     top: 4px;
-    left: 8px;
-    right: 8px;
-  }
-  .nav-floating-pill {
-    order: 0;
-    width: auto;
+    left: 4px;
+    right: 4px;
   }
   .view-section {
-    top: 56px;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
+    top: 54px;
+    left: 4px;
+    right: 4px;
+    bottom: 60px;
   }
   .home-hero-panel {
     padding: 14px;
-    max-height: calc(100vh - 70px);
-    overflow-y: auto;
   }
   .hero-heading {
     font-size: 18px;
   }
   .hero-desc {
     font-size: 11px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .nav-tab-label {
+    font-size: 8px !important;
+    max-width: 52px;
+  }
+  .nav-tab-icon {
+    font-size: 17px;
+  }
+  .nav-tab {
+    padding: 5px 2px;
+  }
+  .stat-num {
+    font-size: 13px;
+  }
+  .stat-label {
+    font-size: 9px;
+  }
+  .stat-box {
+    padding: 6px 4px;
+  }
+  .quick-stats-grid {
+    gap: 4px;
+  }
+
+  /* Panels smaller */
+  .parts-list-panel,
+  .part-detail-panel,
+  .sim-steps-panel,
+  .psu-calc-panel {
+    max-height: 36vh;
+  }
+  .panel-title {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  /* Watt */
+  .watt-value {
+    font-size: 20px;
+  }
+
+  /* Modal */
+  .modal-title {
+    font-size: 14px;
+  }
+  .modal-body {
+    padding: 10px 12px;
+  }
+  .ff-card {
+    padding: 10px 8px;
+  }
+  .ff-title {
+    font-size: 12px;
+  }
+
+  /* Quiz */
+  .quiz-q-text {
+    font-size: 13px;
+  }
+  .quiz-opt-btn {
+    padding: 10px;
+    font-size: 11.5px;
+  }
+
+  /* Tools dropdown — full width bottom sheet style */
+  .tools-dropdown-card {
+    position: fixed;
+    top: auto;
+    bottom: 54px;
+    left: 4px;
+    right: 4px;
+    width: auto;
+    border-radius: 14px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+/* ── Very small phone (≤360px) ── */
+@media (max-width: 360px) {
+  .hero-heading {
+    font-size: 16px;
+  }
+  .hero-desc {
+    font-size: 10.5px;
+  }
+  .hero-badge {
+    font-size: 8.5px;
+  }
+  .multimedia-pills {
+    display: none;
+  }
+  .nav-tab-label {
+    display: none !important;
+  }
+  .nav-tab-icon {
+    font-size: 18px;
+  }
+  .nav-tab {
+    padding: 8px 6px;
+  }
+}
+
+/* ── Landscape phone override ── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .nav-floating-pill {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    transform: none !important;
+    border-radius: 0;
+    z-index: 100;
+    padding: 2px 4px;
+    flex-direction: row;
+    justify-content: space-around;
+    border-top: 1px solid rgba(0, 240, 255, 0.22);
+    background: rgba(6, 10, 22, 0.95);
+  }
+  .nav-tab {
+    flex-direction: row;
+    gap: 4px;
+    padding: 4px 8px;
+  }
+  .nav-tab-label {
+    display: block !important;
+    font-size: 10px;
+  }
+  .nav-tab-icon {
+    font-size: 14px;
+  }
+  .top-floating-header {
+    top: 4px;
+    left: 8px;
+    right: 8px;
+  }
+  .view-section {
+    top: 50px;
+    bottom: 42px;
+    left: 8px;
+    right: 8px;
+  }
+  .home-hero-panel {
+    padding: 12px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .hero-heading {
+    font-size: 17px;
+  }
+  .hero-desc {
+    font-size: 10px;
+    margin-bottom: 6px;
   }
   .viewport-hud-bottom {
-    bottom: 4px;
+    bottom: 36px;
   }
   .camera-hint {
     display: none;
@@ -2438,6 +2547,6 @@ html, body {
   .part-detail-panel,
   .sim-steps-panel,
   .psu-calc-panel {
-    max-height: 60vh;
+    max-height: 55vh;
   }
 }
