@@ -659,7 +659,7 @@ window.PC_DATA = {
     { no: 1, name: 'Muh. Farid Hakim', nim: '2301010211' },
     { no: 2, name: 'Mauulana Habib Al Ansyori', nim: '2301010197' },
     { no: 3, name: 'Mohamad Irfan fadhlurrahman', nim: '2301010162' },
-    { no: 4, name: 'Mohammad Syahiddin Danuwarsi Abdussamad', nim: '2301010187' },
+    { no: 4, name: 'Mohammad Syahiddin Danuwarsi Abdussamas', nim: '2301010174' },
     { no: 5, name: 'Arya Ramadhani', nim: '2301010208' },
     { no: 6, name: 'Nabila Umardi', nim: '2301010165' },
     { no: 7, name: 'Muhammad Ferris Naufal', nim: '2301010174' },

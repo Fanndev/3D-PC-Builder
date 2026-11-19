@@ -87,7 +87,7 @@ Aplikasi ini bersifat *client-side* murni tanpa memerlukan build tools atau serv
 | 1 | Muh. Farid Hakim | `2301010211` |
 | 2 | Mauulana Habib Al Ansyori | `2301010197` |
 | 3 | Mohamad Irfan fadhlurrahman | `2301010162` |
-| 4 | Mohammad Syahiddin Danuwarsi Abdussamad | `2301010187` |
+| 4 | Mohammad Syahiddin Danuwarsi Abdussamas | `2301010174` |
 | 5 | Arya Ramadhani | `2301010208` |
 | 6 | Nabila Umardi | `2301010165` |
 | 7 | Muhammad Ferris Naufal | `2301010174` |

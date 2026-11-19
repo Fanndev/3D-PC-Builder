@@ -337,31 +337,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Custom GLB 3D File Loader Input
-  const glbInput = document.getElementById('input-custom-glb');
-  document.getElementById('btn-upload-glb')?.addEventListener('click', () => {
-    glbInput?.click();
-  });
-
-  glbInput?.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    scene3d.loadCustomGlbFile(
-      file,
-      (name) => {
-        showToast(`Model 3D Kustom "${name}" berhasil dimuat!`);
-        document.getElementById('btn-restore-rig').style.display = 'inline-flex';
-      },
-      () => showToast('Gagal memuat file .glb/.gltf')
-    );
-  });
-
-  document.getElementById('btn-restore-rig')?.addEventListener('click', (e) => {
-    e.currentTarget.style.display = 'none';
-    scene3d.restoreDefaultRig();
-    showToast('Kembali ke Rig 3D PC Builder 101 Default');
-  });
-
   /* --------------------------------------------------------------------------
      VIEW 2: EKSPLORASI 3D HARDWARE (PART LIST & INSPECTOR)
      -------------------------------------------------------------------------- */
@@ -856,7 +831,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnModeMp4 = document.getElementById('btn-mode-mp4');
     const btnModeCanvas = document.getElementById('btn-mode-canvas');
     const modeBadge = document.getElementById('video-mode-badge');
-    const fileInput = document.getElementById('input-custom-video');
 
     let isMp4Mode = true;
 
@@ -972,20 +946,6 @@ document.addEventListener('DOMContentLoaded', () => {
       audio.playVoiceOver(`${chap.title}. ${chap.summary}`, chap.audioFile, (speaking) => {
         btnNarrateChap.textContent = speaking ? '⏹️ Stop Suara' : '🔊 Narasi Audio Bab';
       });
-    });
-
-    document.getElementById('btn-load-mp4')?.addEventListener('click', () => {
-      fileInput?.click();
-    });
-
-    fileInput?.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file || !mp4Video) return;
-      const url = URL.createObjectURL(file);
-      setVideoDisplayMode(true);
-      mp4Video.src = url;
-      mp4Video.play().catch(() => {});
-      showToast(`Video "${file.name}" berhasil dimuat ke pemutar!`);
     });
 
     // Animated Canvas Motion-Graphic Explainer Loop
