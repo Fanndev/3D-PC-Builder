@@ -140,9 +140,15 @@
 
   <!-- VIEW 1: BERANDA (HERO OVERLAY + INTERACTIVE 3D RIG) -->
   <section class="view-section active" id="view-home">
-    <div class="glass-panel home-hero-panel">
-      <div class="hero-badge">
-        <span>✨ WEBGL THREE.JS • INTERACTIVE MULTIMEDIA</span>
+    <button class="panel-trigger-pill left-trigger" id="btn-show-hero" style="display:none;" title="Tampilkan Info Beranda">
+      📖 <span>Tampilkan Info Beranda</span>
+    </button>
+    <div class="glass-panel home-hero-panel" id="home-hero-panel">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <div class="hero-badge" style="margin-bottom:0;">
+          <span>✨ WEBGL THREE.JS • INTERACTIVE MULTIMEDIA</span>
+        </div>
+        <button class="panel-collapse-btn" id="btn-collapse-hero" title="Periksa Model 3D Layar Penuh">✕</button>
       </div>
       <h1 class="hero-heading">
         Eksplorasi & Rakit <span>Perangkat Keras PC</span> dalam Ruang 3D.
@@ -167,6 +173,10 @@
           🛠️ Simulasi Rakit PC
         </button>
       </div>
+
+      <button class="btn-primary" id="btn-view-3d-clean" style="width:100%; margin-bottom:12px; background:linear-gradient(135deg, #00f0ff, #3b82f6); color:#020617;">
+        👁️ Periksa & Putar PC 3D (Layar Penuh)
+      </button>
 
       <button class="btn-secondary" id="btn-welcome-vo" style="width:100%; margin-bottom:16px;">
         🔊 Putar Sambutan Audio (Voice-Over)

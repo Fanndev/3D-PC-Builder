@@ -54,13 +54,19 @@ class PCBuilder3DScene {
   init() {
     const width = window.innerWidth;
     const height = window.innerHeight;
+    const isMobile = width <= 768;
 
     // 1. Scene & Fog
     this.scene = new THREE.Scene();
     this.scene.fog = new THREE.FogExp2(0x060913, 0.032);
 
-    // 2. Camera
-    this.camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+    // 2. Camera with mobile-optimized FOV & framing
+    const fov = isMobile ? 54 : 42;
+    if (isMobile) {
+      this.camTargetPos.set(9.6, 4.2, 11.4);
+      this.camTargetLook.set(0, 0.7, 0);
+    }
+    this.camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 100);
     this.camera.position.copy(this.camTargetPos);
 
     // 3. High-Performance Optimized Renderer
@@ -73,14 +79,18 @@ class PCBuilder3DScene {
     this.renderer.toneMappingExposure = 1.22;
     this.container.appendChild(this.renderer.domElement);
 
-    // 4. Smooth Damped OrbitControls
+    // 4. Smooth Damped OrbitControls (Mobile Multi-Touch Enabled)
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.08;
-    this.controls.maxDistance = 18;
-    this.controls.minDistance = 2.4;
-    this.controls.maxPolarAngle = Math.PI * 0.85;
+    this.controls.maxDistance = 28;
+    this.controls.minDistance = 1.0;
+    this.controls.maxPolarAngle = Math.PI * 0.88;
     this.controls.target.copy(this.camTargetLook);
+    this.controls.touches = {
+      ONE: THREE.TOUCH.ROTATE,
+      TWO: THREE.TOUCH.DOLLY_PAN
+    };
 
     this.hotspotsVisible = true;
 
@@ -1242,6 +1252,14 @@ class PCBuilder3DScene {
     const offsetDiff = new THREE.Vector3().subVectors(group.userData.targetPos, group.userData.assembledPos);
     this.camTargetPos.copy(group.userData.camPos).add(offsetDiff);
     this.camTargetLook.copy(group.userData.camLook).add(offsetDiff);
+
+    // On mobile, frame the part in the upper clear region of the screen so it's not hidden behind detail cards
+    if (window.innerWidth <= 768) {
+      const dir = new THREE.Vector3().subVectors(this.camTargetPos, this.camTargetLook).multiplyScalar(1.22);
+      this.camTargetLook.y += 0.35;
+      this.camTargetPos.copy(this.camTargetLook).add(dir);
+    }
+
     this.isCameraAnimating = true;
 
     // Brief scale pulse on the selected 3D part
@@ -1253,8 +1271,14 @@ class PCBuilder3DScene {
   }
 
   resetCameraOverview() {
-    this.camTargetPos.set(7.2, 3.6, 8.6);
-    this.camTargetLook.set(0, 0.3, 0);
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      this.camTargetPos.set(9.6, 4.2, 11.4);
+      this.camTargetLook.set(0, 0.7, 0);
+    } else {
+      this.camTargetPos.set(7.2, 3.6, 8.6);
+      this.camTargetLook.set(0, 0.3, 0);
+    }
     this.isCameraAnimating = true;
   }
 
@@ -1487,6 +1511,7 @@ class PCBuilder3DScene {
     const w = window.innerWidth;
     const h = window.innerHeight;
     this.camera.aspect = w / h;
+    this.camera.fov = (w < h || w <= 768) ? 54 : 42;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(w, h);
   }

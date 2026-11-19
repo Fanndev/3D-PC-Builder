@@ -275,6 +275,39 @@ document.addEventListener('DOMContentLoaded', () => {
     showPartInspector();
   });
 
+  // Home Hero Panel Collapse & Full 3D Mode
+  const heroPanel = document.getElementById('home-hero-panel');
+  const btnShowHero = document.getElementById('btn-show-hero');
+  const btnCollapseHero = document.getElementById('btn-collapse-hero');
+  const btnView3dClean = document.getElementById('btn-view-3d-clean');
+
+  function collapseHeroPanel() {
+    heroPanel?.classList.add('collapsed');
+    if (btnShowHero) btnShowHero.style.display = 'inline-flex';
+    scene3d.resetCameraOverview();
+    showToast('👁️ Mode 3D Penuh Aktif! Geser untuk putar 360° & zoom PC.');
+  }
+
+  function showHeroPanel() {
+    heroPanel?.classList.remove('collapsed');
+    if (btnShowHero) btnShowHero.style.display = 'none';
+  }
+
+  btnCollapseHero?.addEventListener('click', () => {
+    audio.playClick();
+    collapseHeroPanel();
+  });
+
+  btnView3dClean?.addEventListener('click', () => {
+    audio.playClick();
+    collapseHeroPanel();
+  });
+
+  btnShowHero?.addEventListener('click', () => {
+    audio.playClick();
+    showHeroPanel();
+  });
+
   // Mode Bersih (Clean 3D Mode: minimizes both side panels & hides pins)
   let isCleanMode = false;
   const btnClean = document.getElementById('hud-btn-clean');
@@ -285,6 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isCleanMode) {
       btnClean.innerHTML = '👁️ Mode Normal';
+      collapseHeroPanel();
       collapsePartsList();
       collapsePartInspector();
       scene3d.toggleHotspots(false);
@@ -293,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast('👁️ Mode Bersih Aktif: Tampilan 3D Penuh Tanpa Halangan!');
     } else {
       btnClean.innerHTML = '👁️ Mode Bersih';
+      showHeroPanel();
       expandPartsList();
       showPartInspector();
       scene3d.toggleHotspots(true);
